@@ -2,6 +2,7 @@
 #define CODEENTITY_H
 
 #include <QList>
+#include <QMap>
 #include <QString>
 
 
@@ -48,6 +49,14 @@ struct Class {
     QString name;               // Имя
     QList<Variable> variables;  // Поля
     QList<Function> functions;  // Методы
+
+};
+
+// Перечисление
+struct Enum {
+
+    QString name;                   // Имя
+    QMap<QString, QString> values;  // Значения
 
 };
 
