@@ -1,6 +1,10 @@
 #ifndef TEEXCEPTION_H
 #define TEEXCEPTION_H
 
+#include <QList>
+#include <QString>
+
+
 enum class ErrorType {
 
     // Ошибки файлов
@@ -49,6 +53,12 @@ class TEException
 {
 public:
     TEException();
+private:
+
+    ErrorType errorType; // Тип ошибки
+    QString filename;    // Файл в котором произошла ошибка
+    int line;            // Строка, на которой произошла ошибка
+    QList<QString> args; // Аргументы, которые будут подставлены в шаблон ошибки
 };
 
 #endif // TEEXCEPTION_H
