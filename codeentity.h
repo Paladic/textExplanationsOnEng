@@ -1,0 +1,3 @@
+#ifndef CODEENTITY_H
+#define CODEENTITY_H
+#endif // CODEENTITY_H
