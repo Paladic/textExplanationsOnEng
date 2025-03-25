@@ -52,7 +52,10 @@ enum class ErrorType {
 class TEException
 {
 public:
-    TEException();
+
+    TEException(const ErrorType errorType, const QString &filename, const int line, const QList<QString> args = QList<QString>());
+    TEException(const ErrorType errorType, const QString &filename, const QList<QString> args = QList<QString>());
+    TEException(const ErrorType errorType, const QList<QString> args = QList<QString>());
 private:
 
     ErrorType errorType; // Тип ошибки
