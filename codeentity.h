@@ -21,4 +21,13 @@ struct Function {
     QString description;    // Описание
 
 };
+
+// Объединение
+struct Union {
+
+    QString name;               // Имя
+    QList<Variable> variables;  // Поля
+    QList<Function> functions;  // Методы
+
+};
 #endif // CODEENTITY_H
