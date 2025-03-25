@@ -19,10 +19,10 @@ enum class ErrorType {
     UnexpectedAttribute,            // Присутствует атрибут, который не должен быть в текущем элементе
     MissingRequiredChildElement,    // У элемента отсутствует необходимый атрибут
     MissingRequiredAttribute,       // У элемента отсутствует необходимый дочерний элемент
-    DuplicateAttribute,             // Необходимый атрибут встречается более допустимого количества раз
     DuplicateElement,               // Необходимый элемент встречается более допустимого количества раз
-    EmptyAttributeName,             // Значение атрибута не заполнено
+    DuplicateAttribute,             // Необходимый атрибут встречается более допустимого количества раз
     EmptyElementValue,              // Значение элемента не заполнено
+    EmptyAttributeName,             // Значение атрибута не заполнено
     ParamsCountFunctionMissmatch,   // Количество параметров в "expression" не соответствует "paramsCount"
     InputSizeExceeded,              // Превышен допустимый размер входных данных
 
