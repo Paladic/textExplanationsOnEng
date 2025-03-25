@@ -1,5 +1,7 @@
 #ifndef CODEENTITY_H
 #define CODEENTITY_H
+
+#include <QList>
 #include <QString>
 
 
@@ -24,6 +26,15 @@ struct Function {
 
 // Объединение
 struct Union {
+
+    QString name;               // Имя
+    QList<Variable> variables;  // Поля
+    QList<Function> functions;  // Методы
+
+};
+
+// Структура
+struct Structure {
 
     QString name;               // Имя
     QList<Variable> variables;  // Поля
