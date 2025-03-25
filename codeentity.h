@@ -41,4 +41,14 @@ struct Structure {
     QList<Function> functions;  // Методы
 
 };
+
+// Класс
+struct Class {
+
+    QString name;               // Имя
+    QList<Variable> variables;  // Поля
+    QList<Function> functions;  // Методы
+
+};
+
 #endif // CODEENTITY_H
