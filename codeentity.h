@@ -11,4 +11,14 @@ struct Variable {
     QString description;    // описание
 
 };
+
+// Функция
+struct Function {
+
+    QString name;           // Имя
+    QString type;           // Тип
+    int paramsCount;        // Количество входных параметров
+    QString description;    // Описание
+
+};
 #endif // CODEENTITY_H
