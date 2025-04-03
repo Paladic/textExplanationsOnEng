@@ -13,3 +13,7 @@ Union::Union(const QString &name, const QList<Variable> &variables, const QList<
 
 Structure::Structure(const QString &name, const QList<Variable> &variables, const QList<Function> &functions)
     : name(name), variables(variables), functions(functions) {}
+
+Class::Class(const QString &name, const QList<Variable> &variables, const QList<Function> &functions)
+    : name(name), variables(variables), functions(functions) {}
+

@@ -56,6 +56,8 @@ struct Class {
     QList<Variable> variables;  // Поля
     QList<Function> functions;  // Методы
 
+    Class(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
+
 };
 
 // Перечисление
