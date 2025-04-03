@@ -34,6 +34,8 @@ struct Union {
     QList<Variable> variables;  // Поля
     QList<Function> functions;  // Методы
 
+    Union(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
+
 };
 
 // Структура
