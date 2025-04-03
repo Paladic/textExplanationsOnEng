@@ -17,3 +17,6 @@ Structure::Structure(const QString &name, const QList<Variable> &variables, cons
 Class::Class(const QString &name, const QList<Variable> &variables, const QList<Function> &functions)
     : name(name), variables(variables), functions(functions) {}
 
+
+Enum::Enum(const QString &name, const QMap<QString, QString> &values)
+    : name(name), values(values) {}

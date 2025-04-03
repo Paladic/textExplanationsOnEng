@@ -66,6 +66,8 @@ struct Enum {
     QString name;                   // Имя
     QMap<QString, QString> values;  // Значения
 
+    Enum(const QString& name = "", const QMap<QString, QString>& values = {});
+
 };
 
 #endif // CODEENTITY_H
