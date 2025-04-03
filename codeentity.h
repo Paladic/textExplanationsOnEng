@@ -13,6 +13,7 @@ struct Variable {
     QString type;           // тип
     QString description;    // описание
 
+    Variable(const QString& name = "", const QString& type = "", const QString& description = "");
 };
 
 // Функция
