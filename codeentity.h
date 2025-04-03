@@ -24,6 +24,7 @@ struct Function {
     int paramsCount;        // Количество входных параметров
     QString description;    // Описание
 
+    Function(const QString& name = "", const QString& type = "", int paramsCount = 0, const QString& description = "");
 };
 
 // Объединение
