@@ -14,6 +14,8 @@ struct Variable {
     QString description;    // описание
 
     Variable(const QString& name = "", const QString& type = "", const QString& description = "");
+
+    QString toQString(const QString& startLine = "") const;
 };
 
 // Функция
@@ -25,6 +27,9 @@ struct Function {
     QString description;    // Описание
 
     Function(const QString& name = "", const QString& type = "", int paramsCount = 0, const QString& description = "");
+
+    QString toQString(const QString& startLine = "") const;
+
 };
 
 // Объединение
@@ -36,6 +41,7 @@ struct Union {
 
     Union(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
 
+    QString toQString(const QString& startLine = "") const;
 };
 
 // Структура
@@ -47,6 +53,7 @@ struct Structure {
 
     Structure(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
 
+    QString toQString(const QString& startLine = "") const;
 };
 
 // Класс
@@ -58,6 +65,7 @@ struct Class {
 
     Class(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
 
+    QString toQString(const QString& startLine = "") const;
 };
 
 // Перечисление
@@ -68,6 +76,7 @@ struct Enum {
 
     Enum(const QString& name = "", const QMap<QString, QString>& values = {});
 
+    QString toQString(const QString& startLine = "") const;
 };
 
 #endif // CODEENTITY_H
