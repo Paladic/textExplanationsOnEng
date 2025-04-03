@@ -45,6 +45,8 @@ struct Structure {
     QList<Variable> variables;  // Поля
     QList<Function> functions;  // Методы
 
+    Structure(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
+
 };
 
 // Класс
