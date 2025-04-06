@@ -49,6 +49,7 @@ void printTests(QTextStream& cout){
 void printExpanssion(QTextStream& cout, const QString& inputFile, const QString& outputFile){
 
     try {
+        Expression expr = Expression(inputFile);
         cout << "\nparse: success\n\n";
         cout << "\nfinal: success";
     }
