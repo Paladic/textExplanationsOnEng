@@ -1,9 +1,16 @@
 #include <QCoreApplication>
+#include <windows.h>
+#include <conio.h>
 void printHelpMessage(QTextStream& cout, const QString& filename);
 
 int main(int argc, char *argv[])
 {
+    SetConsoleOutputCP(CP_UTF8);
+
     QCoreApplication a(argc, argv);
+    QTextStream cout(stdout);
+    cout.setEncoding(QStringConverter::Utf8);
+
     QString fileName = QCoreApplication::applicationFilePath();
     QFileInfo fileInfo(fileName);
     fileName = fileInfo.fileName();
