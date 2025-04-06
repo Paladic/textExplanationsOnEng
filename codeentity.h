@@ -2,7 +2,7 @@
 #define CODEENTITY_H
 
 #include <QList>
-#include <QMap>
+#include <QHash>
 #include <QString>
 
 
@@ -36,10 +36,10 @@ struct Function {
 struct Union {
 
     QString name;               // Имя
-    QList<Variable> variables;  // Поля
-    QList<Function> functions;  // Методы
+    QHash<QString, Variable> variables;  // Поля
+    QHash<QString, Function> functions;  // Методы
 
-    Union(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
+    Union(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
@@ -48,10 +48,10 @@ struct Union {
 struct Structure {
 
     QString name;               // Имя
-    QList<Variable> variables;  // Поля
-    QList<Function> functions;  // Методы
+    QHash<QString, Variable> variables;  // Поля
+    QHash<QString, Function> functions;  // Методы
 
-    Structure(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
+    Structure(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
@@ -60,10 +60,10 @@ struct Structure {
 struct Class {
 
     QString name;               // Имя
-    QList<Variable> variables;  // Поля
-    QList<Function> functions;  // Методы
+    QHash<QString, Variable> variables;  // Поля
+    QHash<QString, Function> functions;  // Методы
 
-    Class(const QString& name = "", const QList<Variable>& variables = {}, const QList<Function>& functions = {});
+    Class(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
@@ -72,9 +72,9 @@ struct Class {
 struct Enum {
 
     QString name;                   // Имя
-    QMap<QString, QString> values;  // Значения
+    QHash<QString, QString> values;  // Значения
 
-    Enum(const QString& name = "", const QMap<QString, QString>& values = {});
+    Enum(const QString& name = "", const QHash<QString, QString>& values = {});
 
     QString toQString(const QString& startLine = "") const;
 };

@@ -33,7 +33,7 @@ QString Function::toQString(const QString& startLine) const {
 
 }
 
-Union::Union(const QString &name, const QList<Variable> &variables, const QList<Function> &functions)
+Union::Union(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
     : name(name), variables(variables), functions(functions) {}
 
 QString Union::toQString(const QString& startLine) const {
@@ -41,13 +41,13 @@ QString Union::toQString(const QString& startLine) const {
     QString result = startLine + "Union:";
     result += " name: " + this->name;
 
-    QListIterator itV(this->variables);
+    QHashIterator itV(this->variables);
     while(itV.hasNext())
-        result += "\n" + itV.next().toQString(startLine + "    ");
+        result += "\n" + itV.next().value().toQString(startLine + "    ");
 
-    QListIterator itF(this->functions);
+    QHashIterator itF(this->functions);
     while(itF.hasNext())
-        result += "\n" + itF.next().toQString(startLine + "    ");
+        result += "\n" + itF.next().value().toQString(startLine + "    ");
 
     return result;
 }
@@ -55,7 +55,7 @@ QString Union::toQString(const QString& startLine) const {
 
 
 
-Structure::Structure(const QString &name, const QList<Variable> &variables, const QList<Function> &functions)
+Structure::Structure(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
     : name(name), variables(variables), functions(functions) {}
 
 QString Structure::toQString(const QString& startLine) const {
@@ -63,19 +63,19 @@ QString Structure::toQString(const QString& startLine) const {
     QString result = startLine + "Structure:";
     result += " name: " + this->name;
 
-    QListIterator itV(this->variables);
+    QHashIterator itV(this->variables);
     while(itV.hasNext())
-        result += "\n" + itV.next().toQString(startLine + "    ");
+        result += "\n" + itV.next().value().toQString(startLine + "    ");
 
-    QListIterator itF(this->functions);
+    QHashIterator itF(this->functions);
     while(itF.hasNext())
-        result += "\n" + itF.next().toQString(startLine + "    ");
+        result += "\n" + itF.next().value().toQString(startLine + "    ");
 
     return result;
 }
 
 
-Class::Class(const QString &name, const QList<Variable> &variables, const QList<Function> &functions)
+Class::Class(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
     : name(name), variables(variables), functions(functions) {}
 
 QString Class::toQString(const QString& startLine) const {
@@ -83,20 +83,20 @@ QString Class::toQString(const QString& startLine) const {
     QString result = startLine + "Class:";
     result += " name: " + this->name;
 
-    QListIterator itV(this->variables);
+    QHashIterator itV(this->variables);
     while(itV.hasNext())
-        result += "\n" + itV.next().toQString(startLine + "    ");
+        result += "\n" + itV.next().value().toQString(startLine + "    ");
 
-    QListIterator itF(this->functions);
+    QHashIterator itF(this->functions);
     while(itF.hasNext())
-        result += "\n" + itF.next().toQString(startLine + "    ");
+        result += "\n" + itF.next().value().toQString(startLine + "    ");
 
     return result;
 
 }
 
 
-Enum::Enum(const QString &name, const QMap<QString, QString> &values)
+Enum::Enum(const QString &name, const QHash<QString, QString> &values)
     : name(name), values(values) {}
 
 QString Enum::toQString(const QString& startLine) const {
@@ -104,7 +104,7 @@ QString Enum::toQString(const QString& startLine) const {
     QString result = startLine + "Enum:";
     result += " name: " + name;
 
-    QMapIterator itV(this->values);
+    QHashIterator itV(this->values);
     while(itV.hasNext()) {
         auto v = itV.next();
         result += "\n   " + startLine + v.key() + ": " + v.value();
