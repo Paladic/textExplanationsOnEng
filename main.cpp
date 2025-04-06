@@ -16,9 +16,11 @@ int main(int argc, char *argv[])
     fileName = fileInfo.fileName();
 
     qDebug() << "hello world";
+    a.exit(0);
+    return 0;
+}
 }
 
-    return a.exec();
 void printHelpMessage(QTextStream& cout, const QString& filename)
 {
     cout << ".\\" + filename + " [-help | -test] [input-file] [output-file]\n";
