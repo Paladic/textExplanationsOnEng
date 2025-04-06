@@ -1,4 +1,10 @@
 #include "expression.h"
+
+Expression::Expression(const QString inputXMLFile) {
+
+
+}
+
 void Expression::setExpression(const QString &newExpression)
 {
     expression = newExpression;
