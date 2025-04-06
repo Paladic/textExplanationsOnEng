@@ -22,7 +22,20 @@ int main(int argc, char *argv[])
     QFileInfo fileInfo(fileName);
     fileName = fileInfo.fileName();
 
-    qDebug() << "hello world";
+    if(QString(argv[1]) == "-help") {
+        printHelpMessage(cout, fileName);
+    }
+    else if(QString(argv[1]) == "-test") {
+        printTests(cout);
+    }
+    else if(argc == 3 && !QString(argv[2]).startsWith("-")) {
+        printExpanssion(cout, argv[1], argv[2]);
+
+    }
+    else {
+        cout << ("Ошибка в синтаксисе команды. Подробнее: .\\" + fileName +  " -help");
+    }
+
     a.exit(0);
     return 0;
 }
