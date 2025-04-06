@@ -1,8 +1,14 @@
+#include "expression.h"
+#include "teexception.h"
+
 #include <QCoreApplication>
+#include <QFileInfo>
 #include <windows.h>
 #include <conio.h>
+
 void printHelpMessage(QTextStream& cout, const QString& filename);
 void printTests(QTextStream& cout);
+void printExpanssion(QTextStream& cout, const QString& inputFile, const QString& outputFile);
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +32,18 @@ void printTests(QTextStream& cout){
     cout << "test\n";
     return;
 }
+
+void printExpanssion(QTextStream& cout, const QString& inputFile, const QString& outputFile){
+
+    try {
+        cout << "\nparse: success\n\n";
+        cout << "\nfinal: success";
+    }
+    catch(TEException exception) {
+        cout << exception.what();
+        cout << "\nfinal: error";
+    }
+
 }
 
 void printHelpMessage(QTextStream& cout, const QString& filename)
