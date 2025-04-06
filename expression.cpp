@@ -1,7 +1,9 @@
 #include "expression.h"
+#include "expressionxmlparser.h"
 
 Expression::Expression(const QString inputXMLFile) {
 
+    ExpressionXmlParser::readDataFromXML(inputXMLFile, *this);
 
 }
 
