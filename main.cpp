@@ -51,6 +51,7 @@ void printExpanssion(QTextStream& cout, const QString& inputFile, const QString&
     try {
         Expression expr = Expression(inputFile);
         cout << "\nparse: success\n\n";
+        cout << expr.ToQstring();
         cout << "\nfinal: success";
     }
     catch(TEException exception) {
