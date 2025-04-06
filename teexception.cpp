@@ -16,6 +16,10 @@ TEException::TEException(const ErrorType errorType, const QString &filename, con
 }
 
 TEException::TEException(const ErrorType errorType, const QList<QString> args) {
+TEException::TEException(const ErrorType errorType,  const int line, const QList<QString> args)
+    : TEException(errorType, "", line, args)
+{
+}
 
     TEException(errorType, "", 0, args);
 }
