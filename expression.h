@@ -21,6 +21,7 @@ class Expression
 
 public:
 
+    QString ToQstring();
     void setExpression(const QString &newExpression);
     QString getExpression() const;
 
