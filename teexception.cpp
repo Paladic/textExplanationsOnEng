@@ -120,3 +120,18 @@ QString TEException::what() const {
 
     return message;
 }
+
+ErrorType TEException::getErrorType() const
+{
+    return errorType;
+}
+
+int TEException::getLine() const
+{
+    return line;
+}
+
+QList<QString> TEException::getArgs() const
+{
+    return args;
+}

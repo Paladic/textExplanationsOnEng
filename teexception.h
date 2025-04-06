@@ -59,6 +59,9 @@ public:
     TEException(const ErrorType errorType, const QList<QString> args = QList<QString>());
 
     QString what() const;
+    ErrorType getErrorType() const;
+    int getLine() const;
+    QList<QString> getArgs() const;
 
 private:
 
