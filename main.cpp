@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <conio.h>
 void printHelpMessage(QTextStream& cout, const QString& filename);
+void printTests(QTextStream& cout);
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,12 @@ int main(int argc, char *argv[])
     qDebug() << "hello world";
     a.exit(0);
     return 0;
+}
+
+void printTests(QTextStream& cout){
+
+    cout << "test\n";
+    return;
 }
 }
 
