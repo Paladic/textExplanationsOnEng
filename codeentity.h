@@ -5,6 +5,15 @@
 #include <QHash>
 #include <QString>
 
+enum class EntityType {
+    Operation,
+    Const,
+    Variable,
+    Function,
+    CustomTypeWithFields,
+    Enum,
+    Undefined
+};
 enum class OperationType {
     PrefixIncrement,          // Префиксный инкремент
     PrefixDecrement,          // Префиксный декремент
