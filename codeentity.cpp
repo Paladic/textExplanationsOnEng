@@ -113,7 +113,7 @@ QString Function::toQString(const QString& startLine) const {
 }
 
 Union::Union(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
-    : name(name), variables(variables), functions(functions) {}
+    : CustomTypeWithFields(name, variables, functions){}
 
 QString Union::toQString(const QString& startLine) const {
 
@@ -131,11 +131,8 @@ QString Union::toQString(const QString& startLine) const {
     return result;
 }
 
-
-
-
 Structure::Structure(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
-    : name(name), variables(variables), functions(functions) {}
+    : CustomTypeWithFields(name, variables, functions){}
 
 QString Structure::toQString(const QString& startLine) const {
 
@@ -155,7 +152,7 @@ QString Structure::toQString(const QString& startLine) const {
 
 
 Class::Class(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
-    : name(name), variables(variables), functions(functions) {}
+    : CustomTypeWithFields(name, variables, functions){}
 
 QString Class::toQString(const QString& startLine) const {
 
@@ -174,7 +171,6 @@ QString Class::toQString(const QString& startLine) const {
 
 }
 
-
 Enum::Enum(const QString &name, const QHash<QString, QString> &values)
     : name(name), values(values) {}
 
@@ -191,3 +187,7 @@ QString Enum::toQString(const QString& startLine) const {
     return result;
 
 }
+
+CustomTypeWithFields::CustomTypeWithFields(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
+    : name(name), variables(variables), functions(functions) {}
+
