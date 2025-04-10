@@ -33,6 +33,16 @@ const QHash<QString, OperatorInfo> OperationMap = {
     {"_++", {OperationArity::Unary, OperationType::PostfixIncrement}},      // Постфиксный инкремент
     {"::",  {OperationArity::Binary, OperationType::StaticMemberAccess}}    // Обращение к статическому элементу
 };
+
+const QHash<EntityType, QString> EntityTypeNames = {
+    {EntityType::Operation, "Operation"},
+    {EntityType::Const, "Const"},
+    {EntityType::Variable, "Variable"},
+    {EntityType::Function, "Function"},
+    {EntityType::CustomTypeWithFields, "CustomTypeWithFields"},
+    {EntityType::Enum, "Enum"},
+    {EntityType::Undefined, "Undefined"}
+};
 Variable::Variable(const QString &name, const QString &type, const QString &description)
     : name(name), type(type), description(description) {}
 
