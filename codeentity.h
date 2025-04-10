@@ -55,6 +55,10 @@ enum class OperationType {
     None
 };
 
+struct OperatorInfo {
+    OperationArity arity;
+    OperationType type;
+};
 // Переменная
 struct Variable {
 
