@@ -59,6 +59,13 @@ struct OperatorInfo {
     OperationArity arity;
     OperationType type;
 };
+
+extern const QHash<QString, OperatorInfo> OperationMap;
+
+extern const QHash<EntityType, QString> EntityTypeNames;
+
+extern const QHash<OperationType, QString> OperationTypeNames;
+
 // Переменная
 struct Variable {
 
