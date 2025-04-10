@@ -81,14 +81,9 @@ struct Function {
 
 };
 
-// Объединение
-struct Union {
-
 // Пользовательский тип данных
 struct CustomTypeWithFields {
     QString name;               // Имя
-    QHash<QString, Variable> variables;  // Поля
-    QHash<QString, Function> functions;  // Методы
     QHash<QString, Variable> variables; // Переменные
     QHash<QString, Function> functions; // Функции
 
@@ -96,30 +91,23 @@ struct CustomTypeWithFields {
     QString toQString(const QString& startLine = "") const;
 };
 
+
+// Объединение
+struct Union : public CustomTypeWithFields {
     Union(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
 
 // Структура
-struct Structure {
-
-    QString name;               // Имя
-    QHash<QString, Variable> variables;  // Поля
-    QHash<QString, Function> functions;  // Методы
-
+struct Structure : public CustomTypeWithFields {
     Structure(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
 
 // Класс
-struct Class {
-
-    QString name;               // Имя
-    QHash<QString, Variable> variables;  // Поля
-    QHash<QString, Function> functions;  // Методы
-
+struct Class : public CustomTypeWithFields {
     Class(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
