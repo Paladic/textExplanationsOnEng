@@ -84,9 +84,17 @@ struct Function {
 // Объединение
 struct Union {
 
+// Пользовательский тип данных
+struct CustomTypeWithFields {
     QString name;               // Имя
     QHash<QString, Variable> variables;  // Поля
     QHash<QString, Function> functions;  // Методы
+    QHash<QString, Variable> variables; // Переменные
+    QHash<QString, Function> functions; // Функции
+
+    CustomTypeWithFields(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
+    QString toQString(const QString& startLine = "") const;
+};
 
     Union(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
