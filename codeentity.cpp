@@ -43,6 +43,42 @@ const QHash<EntityType, QString> EntityTypeNames = {
     {EntityType::Enum, "Enum"},
     {EntityType::Undefined, "Undefined"}
 };
+
+const QHash<OperationType, QString> OperationTypeNames = {
+    {OperationType::PrefixIncrement, "PrefixIncrement"},
+    {OperationType::PrefixDecrement, "PrefixDecrement"},
+    {OperationType::ArrayAccess, "ArrayAccess"},
+    {OperationType::FieldAccess, "FieldAccess"},
+    {OperationType::PointerFieldAccess, "PointerFieldAccess"},
+    {OperationType::Dereference, "Dereference"},
+    {OperationType::AddressOf, "AddressOf"},
+    {OperationType::UnaryMinus, "UnaryMinus"},
+    {OperationType::Not, "Not"},
+    {OperationType::And, "And"},
+    {OperationType::Or, "Or"},
+    {OperationType::Multiplication, "Multiplication"},
+    {OperationType::Division, "Division"},
+    {OperationType::Modulus, "Modulus"},
+    {OperationType::Addition, "Addition"},
+    {OperationType::Subtraction, "Subtraction"},
+    {OperationType::LessThan, "LessThan"},
+    {OperationType::GreaterThan, "GreaterThan"},
+    {OperationType::LessThanOrEqual, "LessThanOrEqual"},
+    {OperationType::GreaterThanOrEqual, "GreaterThanOrEqual"},
+    {OperationType::Equal, "Equal"},
+    {OperationType::NotEqual, "NotEqual"},
+    {OperationType::ModulusAssignment, "ModulusAssignment"},
+    {OperationType::DivisionAssignment, "DivisionAssignment"},
+    {OperationType::MultiplicationAssignment, "MultiplicationAssignment"},
+    {OperationType::SubtractionAssignment, "SubtractionAssignment"},
+    {OperationType::AdditionAssignment, "AdditionAssignment"},
+    {OperationType::Assignment, "Assignment"},
+    {OperationType::PostfixDecrement, "PostfixDecrement"},
+    {OperationType::PostfixIncrement, "PostfixIncrement"},
+    {OperationType::StaticMemberAccess, "StaticMemberAccess"},
+    {OperationType::None, "None"}
+};
+
 Variable::Variable(const QString &name, const QString &type, const QString &description)
     : name(name), type(type), description(description) {}
 
