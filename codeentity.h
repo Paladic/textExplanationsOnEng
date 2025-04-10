@@ -73,7 +73,7 @@ struct Variable {
     QString type;           // тип
     QString description;    // описание
 
-    Variable(const QString& name = "", const QString& type = "", const QString& description = "");
+    Variable(const QString& name = "", const QString& type = "", const QString& description = {});
 
     QString toQString(const QString& startLine = "") const;
 };
@@ -86,7 +86,7 @@ struct Function {
     int paramsCount;        // Количество входных параметров
     QString description;    // Описание
 
-    Function(const QString& name = "", const QString& type = "", int paramsCount = 0, const QString& description = "");
+    Function(const QString& name = "", const QString& type = "", int paramsCount = 0, const QString& description = {});
 
     QString toQString(const QString& startLine = "") const;
 
