@@ -5,6 +5,40 @@
 #include <QHash>
 #include <QString>
 
+enum class OperationType {
+    PrefixIncrement,          // Префиксный инкремент
+    PrefixDecrement,          // Префиксный декремент
+    ArrayAccess,              // Обращение к элементу под индексом
+    FieldAccess,              // Обращение к полю элемента
+    PointerFieldAccess,       // Обращение к полю по указателю
+    Dereference,              // Обращение к значению по адресу
+    AddressOf,                // Обращение к адресу элемента
+    UnaryMinus,               // Унарный минус
+    Not,                      // Логическое «не»
+    And,                      // Логическое «и»
+    Or,                       // Логическое «или»
+    Multiplication,           // Умножение
+    Division,                 // Деление
+    Modulus,                  // Остаток от деления
+    Addition,                 // Сложение
+    Subtraction,              // Вычитание
+    LessThan,                 // Оператор сравнения «меньше»
+    GreaterThan,              // Оператор сравнения «больше»
+    LessThanOrEqual,          // Оператор сравнения «меньше либо равно»
+    GreaterThanOrEqual,       // Оператор сравнения «больше либо равно»
+    Equal,                    // Оператор сравнения «равно»
+    NotEqual,                 // Оператор сравнения «не равно»
+    ModulusAssignment,        // Взятие остатка от деления с присваиванием
+    DivisionAssignment,       // Деление с присваиванием
+    MultiplicationAssignment, // Умножение с присваиванием
+    SubtractionAssignment,    // Вычитание с присваиванием
+    AdditionAssignment,       // Сложение с присваиванием
+    Assignment,               // Присваивание
+    PostfixDecrement,         // Постфиксный декремент
+    PostfixIncrement,         // Постфиксный инкремент
+    StaticMemberAccess,       // Обращение к статическому элементу
+    None
+};
 
 // Переменная
 struct Variable {
