@@ -14,6 +14,12 @@ enum class EntityType {
     Enum,
     Undefined
 };
+
+enum class OperationArity {
+    Unary,
+    Binary
+};
+
 enum class OperationType {
     PrefixIncrement,          // Префиксный инкремент
     PrefixDecrement,          // Префиксный декремент
