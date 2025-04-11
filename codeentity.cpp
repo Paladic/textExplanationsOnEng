@@ -83,16 +83,10 @@ Variable::Variable(const QString &name, const QString &type, const QString &desc
     : name(name), type(type), description(description) {}
 
 QString Variable::toQString(const QString& startLine) const {
-
-    //QString result = startLine + "Variable:";
-    //result += "\n" + startLine + "  name: " + name;
-    //result += "\n" + startLine + "  type: " + type;
-    //result += "\n" + startLine + "  description: " + description;
-
     QString result = startLine + "Variable:";
-    result += "  name: " +          this->name;
-    result += ";  type: " +         this->type;
-    result += ";  description: " +  this->description;
+    result += "  name: " + this->name;
+    result += ";  type: " + this->type;
+    result += ";  description: " + this->description;
 
     return result;
 }
@@ -106,7 +100,7 @@ QString Function::toQString(const QString& startLine) const {
     QString result = startLine + "Function:";
     result += "  name: " +          this->name;
     result += ";  type: " +         this->type;
-    result += ";  description: " +  this->description;
+    result += ";  description: " + this->description;
 
     return result;
 
@@ -149,7 +143,6 @@ QString Structure::toQString(const QString& startLine) const {
 
     return result;
 }
-
 
 Class::Class(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
     : CustomTypeWithFields(name, variables, functions){}
