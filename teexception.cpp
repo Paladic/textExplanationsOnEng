@@ -113,10 +113,9 @@ QString TEException::what() const {
         break;
     }
 
-    //TODO: добавить функцию замены переменных
-    //if(args.count() > 0) {
-    // message = ...
-    //}
+    if(args.count() > 0) {
+        message = replacePlaceholders(message, this->args);
+    }
 
     return message;
 }
