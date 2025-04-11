@@ -191,3 +191,9 @@ QString Enum::toQString(const QString& startLine) const {
 CustomTypeWithFields::CustomTypeWithFields(const QString &name, const QHash<QString, Variable> &variables, const QHash<QString, Function> &functions)
     : name(name), variables(variables), functions(functions) {}
 
+QString CustomTypeWithFields::toQString(const QString &startLine) const
+{
+    QString result = startLine + "Custom Type:";
+    result += "  name: " +          this->name;
+    return result;
+}
