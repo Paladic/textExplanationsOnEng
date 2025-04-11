@@ -47,7 +47,9 @@ enum class ErrorType {
 
     // Ошибки формата XML (атрибут "paramsCount")
     InvalidParamsCount, // У атрибута "paramsCount" указан неправильный формат данных
-
+    MissingCases,       // У описания отсутствует обязательный падеж    28
+    MissingReplacementArguments, // Отсутствие аргумента для замены
+    IncorrectCaseInPlaceHolder // Неправильно указан падеж в плейсхолдере
 };
 
 class TEException
