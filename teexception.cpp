@@ -90,7 +90,7 @@ QString TEException::what() const {
     case ErrorType::MultipleIncrementDecrement:
         message += "in the context of the <expression> element, the value of the \"{1}\" element cannot be incremented or decremented more than once.";
         break;
-    case ErrorType::NewerUsedElement:
+    case ErrorType::NeverUsedElement:
         message += "element with name \"{1}\" never occurs in element <expression>";
         break;
     case ErrorType::ParamsCountDescriptionDifference:
