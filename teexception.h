@@ -3,7 +3,7 @@
 
 #include <QList>
 #include <QString>
-
+#include <QHash>
 
 enum class ErrorType {
 
@@ -65,6 +65,9 @@ public:
     ErrorType getErrorType() const;
     int getLine() const;
     QList<QString> getArgs() const;
+
+    QString replacePlaceholders(QString pattern, const QList<QString> args) const;
+    static const QHash<ErrorType, QString> ErrorTypeNames;
 
 private:
 
