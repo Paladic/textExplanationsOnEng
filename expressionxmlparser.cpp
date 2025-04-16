@@ -4,6 +4,114 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+QHash<QString, Union> ExpressionXmlParser::parseUnions(const QDomElement &_unions)
+{
+    validateElement(_unions, QList<QString>{}, QHash<QString, int>{{"union", childElementsMaxCount}}, false);
+
+    QHash<QString, Union> result;
+    if(_unions.childNodes().isEmpty()) return result;
+
+    QDomNode childNode = _unions.firstChild();
+    while (!childNode.isNull()) {
+
+        Union child = parseUnion(childNode.toElement());
+        result.insert(child.name, child);
+
+        childNode = childNode.nextSibling();
+    }
+
+    return result;
+}
+
+Union ExpressionXmlParser::parseUnion(const QDomElement &_union)
+{
+    validateElement(_union, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, true);
+
+    QString name = parseName(_union);
+    QHash<QString, Variable> variables = parseVariables(_union.firstChildElement("variables"));
+    QHash<QString, Function> functions = parseFunctions(_union.firstChildElement("functions"));
+
+    int elementsCount = variables.count() + functions.count();
+    if(elementsCount > childElementsMaxCount)
+        throw TEException(ErrorType::InputSizeExceeded, _union.lineNumber(), QList<QString>{QString::number(elementsCount), QString::number(elementsCount), QString::number(childElementsMaxCount)});
+
+    return Union(name, variables, functions);
+}
+
+QHash<QString, Structure> ExpressionXmlParser::parseStructures(const QDomElement &_structures)
+{
+
+    validateElement(_structures, QList<QString>{}, QHash<QString, int>{{"structure", childElementsMaxCount}}, false);
+
+    QHash<QString, Structure> result;
+    if(_structures.childNodes().isEmpty()) return result;
+
+    QDomNode childNode = _structures.firstChild();
+    while (!childNode.isNull()) {
+
+        Structure child = parseStructure(childNode.toElement());
+        result.insert(child.name, child);
+
+        childNode = childNode.nextSibling();
+
+    }
+
+    return result;
+
+}
+
+Structure ExpressionXmlParser::parseStructure(const QDomElement &_structure)
+{
+    validateElement(_structure, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, true);
+
+    QString name = parseName(_structure);
+    QHash<QString, Variable> variables = parseVariables(_structure.firstChildElement("variables"));
+    QHash<QString, Function> functions = parseFunctions(_structure.firstChildElement("functions"));
+
+    int elementsCount = variables.count() + functions.count();
+    if(elementsCount > childElementsMaxCount)
+        throw TEException(ErrorType::InputSizeExceeded, _structure.lineNumber(), QList<QString>{QString::number(elementsCount), QString::number(elementsCount), QString::number(childElementsMaxCount)});
+
+    return Structure(name, variables, functions);
+}
+
+QHash<QString, Class> ExpressionXmlParser::parseClasses(const QDomElement &_classes)
+{
+
+    validateElement(_classes, QList<QString>{}, QHash<QString, int>{{"class", childElementsMaxCount}}, false);
+
+    QHash<QString, Class> result;
+    if(_classes.childNodes().isEmpty()) return result;
+
+    QDomNode childNode = _classes.firstChild();
+    while (!childNode.isNull()) {
+
+        Class child = parseClass(childNode.toElement());
+        result.insert(child.name, child);
+
+        childNode = childNode.nextSibling();
+
+    }
+
+    return result;
+
+}
+
+Class ExpressionXmlParser::parseClass(const QDomElement &_class)
+{
+    validateElement(_class, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, true);
+
+    QString name = parseName(_class);
+    QHash<QString, Variable> variables = parseVariables(_class.firstChildElement("variables"));
+    QHash<QString, Function> functions = parseFunctions(_class.firstChildElement("functions"));
+
+    int elementsCount = variables.count() + functions.count();
+    if(elementsCount > childElementsMaxCount)
+        throw TEException(ErrorType::InputSizeExceeded, _class.lineNumber(), QList<QString>{QString::number(elementsCount), QString::number(elementsCount), QString::number(childElementsMaxCount)});
+
+    return Class(name, variables, functions);
+}
+
 QHash<QString, Enum> ExpressionXmlParser::parseEnums(const QDomElement &_enums)
 {
 
