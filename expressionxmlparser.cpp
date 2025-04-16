@@ -4,6 +4,17 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+QString ExpressionXmlParser::parseDescription(const QDomElement &_description) {
+
+    QString res = _description.text();
+
+    if(res.isEmpty()) throw TEException(ErrorType::EmptyElementValue);
+
+    if(res.length() > descMaxLength) throw TEException(ErrorType::InputSizeExceeded, _description.lineNumber(), QList<QString>{"description", QString::number(res.length()), QString::number(descMaxLength)});
+
+    return res;
+}
+
 bool ExpressionXmlParser::isLatinLetter(const QChar c) {
     // Явная проверка латинских букв
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
