@@ -9,6 +9,20 @@ bool ExpressionXmlParser::isLatinLetter(const QChar c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
+void ExpressionXmlParser::validateElement(const QDomElement& curElement, const QList<QString>& allowedAttributes, const QHash<QString, int>& allowedElements, bool checkRequired, bool textIsError) {
+
+    //if(textIsError && (curElement.isText() || curElement) throw TEException(ErrorType::XML_INPUT_SIZE_EXCEEDED, this->inputFilePath, curElement.lineNumber(), QList<QString>{curElement.text(), QString::number(curElement.text().length()), "0"});
+
+    validateAttributes(curElement, allowedAttributes);
+    validateChildElements(curElement, allowedElements);
+
+    if (checkRequired) {
+        validateRequiredAttributes(curElement, allowedAttributes);
+        validateRequiredChildElements(curElement, allowedElements.keys());
+    }
+
+}
+
 void ExpressionXmlParser::validateAttributes(const QDomElement& curElement, const QList<QString>& attributes) {
 
     QDomNamedNodeMap getAttributes = curElement.attributes();
