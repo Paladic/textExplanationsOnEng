@@ -21,4 +21,28 @@ void ExpressionXmlParser::validateAttributes(const QDomElement& curElement, cons
         }
     }
 }
+
+void ExpressionXmlParser::validateChildElements(const QDomElement& curElement, const QHash<QString, int>& elements) {
+
+    QDomNode childNode = curElement.firstChild();
+    while (!childNode.isNull()) {
+        if (childNode.isElement()) {
+            QDomElement childElement = childNode.toElement();
+            QString childName = childElement.tagName();
+
+            if (!elements.contains(childName) || elements.count() == 0) {
+                throw TEException(ErrorType::UnexpectedElement, childElement.lineNumber(), QList<QString>{childName, elements.keys().join("; ")});
+            }
+            else {
+                int count = countDirectChildren(curElement, childName);
+                int value = elements.value(childName);
+                if(count > value)
+                    throw TEException(ErrorType::DuplicateElement, childElement.lineNumber(), QList<QString>{childName});
+            }
+        }
+
+        childNode = childNode.nextSibling();
+    }
+}
+
 }
