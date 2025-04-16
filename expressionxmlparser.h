@@ -9,6 +9,13 @@ public:
     static void readDataFromXML(const QString& inputFilePath, Expression& expression);
 
     //////////////////////////////////////////////////
+    /// Методы для работы с файлами
+    /////////////////////////////////////////////////
+
+    static QDomDocument readXML(const QString& filePath);
+    static bool checkFileReadAccess(const QString& filePath);
+    static QTemporaryFile* createTempCopy(const QString &sourceFilePath);
+    //////////////////////////////////////////////////
     /// Константы
     /////////////////////////////////////////////////
 
