@@ -4,6 +4,57 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+QHash<QString, Enum> ExpressionXmlParser::parseEnums(const QDomElement &_enums)
+{
+
+    validateElement(_enums, QList<QString>{}, QHash<QString, int>{{"enum", 20}}, false);
+
+    QHash<QString, Enum> result;
+    if(_enums.childNodes().isEmpty()) return result;
+
+    QDomNode childNode = _enums.firstChild();
+    while (!childNode.isNull()) {
+
+        Enum child = parseEnum(childNode.toElement());
+        result.insert(child.name, child);
+
+        childNode = childNode.nextSibling();
+
+    }
+
+    return result;
+
+}
+
+Enum ExpressionXmlParser::parseEnum(const QDomElement &_enum)
+{
+    validateElement(_enum, QList<QString>{"name"}, QHash<QString, int>{{"value", 20}}, true);
+
+    QString name = parseName(_enum);
+    QHash<QString, QString> values = parseEnumValues(_enum);
+
+    return Enum(name, values);
+}
+
+QHash<QString, QString> ExpressionXmlParser::parseEnumValues(const QDomElement &_values)
+{
+    QHash<QString, QString> result;
+    // Перебираем все элементы <value> внутри <enum>
+    QDomNodeList valueNodes = _values.elementsByTagName("value");
+    for (int i = 0; i < valueNodes.size(); ++i) {
+        QDomElement valueElement = valueNodes.at(i).toElement();
+
+        validateElement(valueElement, QList<QString>{"name"}, QHash<QString, int>{{"description", 1}}, true);
+
+        QString valueName = valueElement.attribute("name");
+        QString description = valueElement.firstChildElement("description").text();
+
+        result.insert(valueName, description);
+    }
+
+    return result;
+}
+
 QString ExpressionXmlParser::parseName(const QDomElement &element) {
 
     QString res = element.attribute("name");
