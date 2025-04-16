@@ -1,7 +1,12 @@
 #ifndef EXPRESSIONXMLPARSER_H
 #define EXPRESSIONXMLPARSER_H
+
 #include "expression.h"
+#include <QDomDocument>
 #include <QString>
+#include <QTemporaryFile>
+
+
 class ExpressionXmlParser
 {
 public:
