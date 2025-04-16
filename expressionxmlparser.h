@@ -13,6 +13,8 @@ public:
 
     static void readDataFromXML(const QString& inputFilePath, Expression& expression);
 
+private:
+
     //////////////////////////////////////////////////
     /// Методы для работы с файлами
     /////////////////////////////////////////////////
