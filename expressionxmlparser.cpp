@@ -45,4 +45,17 @@ void ExpressionXmlParser::validateChildElements(const QDomElement& curElement, c
     }
 }
 
+void ExpressionXmlParser::validateRequiredAttributes(const QDomElement& curElement, const QList<QString>& attributes) {
+
+    QListIterator<QString> iter(attributes);
+
+    while(iter.hasNext()){
+        QString it = iter.next();
+        if (!curElement.hasAttribute(it)) {
+            throw TEException(ErrorType::MissingRequiredAttribute, curElement.lineNumber(), QList<QString>{it});
+        }
+    }
+
+}
+
 }
