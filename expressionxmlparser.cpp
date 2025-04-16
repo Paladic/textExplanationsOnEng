@@ -80,4 +80,17 @@ void ExpressionXmlParser::validateRequiredChildElements(const QDomElement& curEl
     }
 }
 
+int ExpressionXmlParser::countDirectChildren(const QDomElement& element, const QString& childName) {
+    int count = 0;
+
+    QDomNode childNode = element.firstChild();
+    while (!childNode.isNull()) {
+        if (childNode.isElement() && childNode.toElement().tagName() == childName) {
+            count++;
+        }
+        childNode = childNode.nextSibling();
+    }
+
+    return count;
 }
+
