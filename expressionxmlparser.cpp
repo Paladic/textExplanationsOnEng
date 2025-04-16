@@ -58,4 +58,26 @@ void ExpressionXmlParser::validateRequiredAttributes(const QDomElement& curEleme
 
 }
 
+void ExpressionXmlParser::validateRequiredChildElements(const QDomElement& curElement, const QList<QString>& elements) {
+
+    QListIterator<QString> iter(elements);
+    while(iter.hasNext()){
+        QString it = iter.next();
+
+        bool foundCurElement = false;
+        QDomNode childNode = curElement.firstChild();
+        while (!childNode.isNull()) {
+            if (childNode.isElement() && childNode.toElement().tagName() == it) {
+                foundCurElement = true;
+                break;
+            }
+            childNode = childNode.nextSibling();
+        }
+
+        if (!foundCurElement) {
+            throw TEException(ErrorType::MissingRequiredChildElement, curElement.lineNumber(), QList<QString>{it});
+        }
+    }
+}
+
 }
