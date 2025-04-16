@@ -120,6 +120,7 @@ private:
     static constexpr int functionParamsMaxCount = 5;
 
 
+    static const QList<QString> supportedDataTypesForVar;
 };
 
 #endif // EXPRESSIONXMLPARSER_H
