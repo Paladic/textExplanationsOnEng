@@ -4,6 +4,25 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+void ExpressionXmlParser::parseQDomDocument(const QDomDocument& doc, Expression &expression) {
+
+    QDomElement root = doc.documentElement();
+    if (root.isNull() || root.tagName() != "root") {
+        throw TEException(ErrorType::MissingRootElemnt);
+    }
+
+    validateElement(root, QList<QString>{}, QHash<QString, int>{{"expression", 1}, {"variables", 1}, {"functions", 1}, {"unions", 1}, {"structures", 1}, {"classes", 1}, {"enums", 1}});
+
+    expression.setExpression(parseExpression(root.firstChildElement("expression")));
+    expression.setVariables(parseVariables(root.firstChildElement("variables")));
+    expression.setFunctions(parseFunctions(root.firstChildElement("functions")));
+    expression.setUnions(parseUnions(root.firstChildElement("unions")));
+    expression.setStructures(parseStructures(root.firstChildElement("structures")));
+    expression.setClasses(parseClasses(root.firstChildElement("classes")));
+    expression.setEnums(parseEnums(root.firstChildElement("enums")));
+
+}
+
 QString ExpressionXmlParser::parseExpression(const QDomElement &_expression)
 {
     QString res = _expression.text();
