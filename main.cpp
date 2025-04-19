@@ -12,6 +12,8 @@ void printExpanssion(QTextStream& cout, const QString& inputFile, const QString&
 
 int main(int argc, char *argv[])
 {
+    qDebug() << "Текущая рабочая директория:" << QDir::currentPath();
+
     SetConsoleOutputCP(CP_UTF8);
     QTextStream out(stdout);
     out.setEncoding(QStringConverter::Utf8);
