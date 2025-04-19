@@ -4,6 +4,39 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+QHash<QString, Function> ExpressionXmlParser::parseFunctions(const QDomElement &_functions)
+{
+
+    validateElement(_functions, QList<QString>{}, QHash<QString, int>{{"function", childElementsMaxCount}}, false);
+
+    QHash<QString, Function> result;
+    if(_functions.childNodes().isEmpty()) return result;
+
+    QDomNode childNode = _functions.firstChild();
+    while (!childNode.isNull()) {
+
+        Function child = parseFunction(childNode.toElement());
+        result.insert(child.name, child);
+
+        childNode = childNode.nextSibling();
+    }
+
+    return result;
+
+}
+
+Function ExpressionXmlParser::parseFunction(const QDomElement &_function)
+{
+    validateElement(_function, QList<QString>{"name", "type", "paramsCount"}, QHash<QString, int>{{"description", 1}}, true);
+
+    QString name = parseName(_function);
+    QString type = _function.attribute("type");
+    int paramsCount = _function.attribute("paramsCount").toInt();
+    QString desc = parseDescription(_function.firstChildElement("description"));;
+
+    return Function(name, type, paramsCount, desc);
+}
+
 QHash<QString, Union> ExpressionXmlParser::parseUnions(const QDomElement &_unions)
 {
     validateElement(_unions, QList<QString>{}, QHash<QString, int>{{"union", childElementsMaxCount}}, false);
