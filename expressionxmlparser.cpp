@@ -4,6 +4,78 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+QDomDocument ExpressionXmlParser::readXML(const QString& inputFilePath) {
+
+    if(inputFilePath.isEmpty())
+        throw TEException(ErrorType::InputFileNotFound, inputFilePath);
+
+    QTemporaryFile* tmpFilePath = createTempCopy(inputFilePath);
+
+    tmpFilePath->open();
+    QString xmlContent = tmpFilePath->readAll();
+    xmlContent = fixXmlFlags(xmlContent);
+
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine, errorColumn;
+
+    //std::cout << xmlContent.toStdString();
+    if (!doc.setContent(xmlContent, &errorMsg, &errorLine, &errorColumn)) {
+        delete tmpFilePath;
+        throw TEException(ErrorType::Parssing, inputFilePath, errorLine);
+    }
+
+    delete tmpFilePath;
+    return doc;
+}
+
+bool ExpressionXmlParser::checkFileReadAccess(const QString &filePath)
+{
+
+    // Пустая строка передана как имя файла
+    if (filePath.isEmpty()) {
+        return false;
+    }
+
+    QFile file(filePath);
+    // Файл не существует
+    if (!file.exists()) {
+        return false;
+    }
+
+    // Файл не открывается
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return false;
+    }
+
+    file.close();
+    return true;
+
+}
+
+QTemporaryFile *ExpressionXmlParser::createTempCopy(const QString &sourceFilePath) {
+
+    QTemporaryFile* tempFile = new QTemporaryFile(QDir(QCoreApplication::applicationDirPath()).filePath("temp_XXXXXX"));
+    //tempFile->setAutoRemove(true);
+
+    if (!tempFile->open()) {
+        delete tempFile;
+        throw TEException(ErrorType::InputCopyFileCannotBeCreated);
+    }
+
+    // Открываем исходный файл для чтения
+    QFile sourceFile(sourceFilePath);
+    if (!sourceFile.open(QIODevice::ReadOnly)){
+        throw TEException(ErrorType::InputFileNotFound);
+    }
+
+    tempFile->write(sourceFile.readAll());
+    tempFile->close();
+    sourceFile.close();
+
+    return tempFile;
+}
+
 QString ExpressionXmlParser::escapeXmlText(const QString& text) {
 
     QString output = text;
