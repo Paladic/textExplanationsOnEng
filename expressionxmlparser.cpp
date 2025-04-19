@@ -4,6 +4,19 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+QString ExpressionXmlParser::parseExpression(const QDomElement &_expression)
+{
+    QString res = _expression.text();
+    if(res.isEmpty() || res.length() < 1)
+        throw TEException(ErrorType::EmptyElementValue, _expression.lineNumber());
+
+
+    if(res.length() > expressionMaxLength) throw TEException(ErrorType::InputSizeExceeded, _expression.lineNumber(), QList<QString>{"description", QString::number(res.length()), QString::number(expressionMaxLength)});
+
+
+    return res;
+}
+
 QHash<QString, Variable> ExpressionXmlParser::parseVariables(const QDomElement &_variables)
 {
 
