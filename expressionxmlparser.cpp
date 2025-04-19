@@ -1,5 +1,7 @@
 #include "expressionxmlparser.h"
 #include "teexception.h"
+#include <QCoreApplication>
+#include <QDir>
 
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
