@@ -4,6 +4,19 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+
+    QDomDocument doc = readXML(inputFilePath);
+
+    parseQDomDocument(doc, expression);
+
+    try {
+
+    }
+    catch(TEException exception) {
+        throw TEException(exception.getErrorType(), inputFilePath, exception.getLine(), exception.getArgs());
+    }
+}
+
 QDomDocument ExpressionXmlParser::readXML(const QString& inputFilePath) {
 
     if(inputFilePath.isEmpty())
