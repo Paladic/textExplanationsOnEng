@@ -4,6 +4,38 @@
 const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "float", "double", "char", "bool", "string" };
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
+QHash<QString, Variable> ExpressionXmlParser::parseVariables(const QDomElement &_variables)
+{
+
+    validateElement(_variables, QList<QString>{}, QHash<QString, int>{{"variable", childElementsMaxCount}}, false);
+
+    QHash<QString, Variable> result;
+    if(_variables.childNodes().isEmpty()) return result;
+
+    QDomNode childNode = _variables.firstChild();
+    while (!childNode.isNull()) {
+
+        Variable child = parseVariable(childNode.toElement());
+        result.insert(child.name, child);
+        childNode = childNode.nextSibling();
+    }
+
+    return result;
+
+}
+
+Variable ExpressionXmlParser::parseVariable(const QDomElement &_variable)
+{
+
+    validateElement(_variable, QList<QString>{"name", "type"}, QHash<QString, int>{{"description", 1}}, true);
+
+    QString name = parseName(_variable);
+    QString type = _variable.attribute("type");
+    QString desc = parseDescription(_variable.firstChildElement("description"));
+
+    return Variable(name, type, desc);
+}
+
 QHash<QString, Function> ExpressionXmlParser::parseFunctions(const QDomElement &_functions)
 {
 
