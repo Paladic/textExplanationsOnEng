@@ -15,8 +15,9 @@ int main(int argc, char *argv[])
     SetConsoleOutputCP(CP_UTF8);
 
     QCoreApplication a(argc, argv);
+    qDebug() << "ыыыыыыыыыыыы";
     QTextStream cout(stdout);
-    cout.setEncoding(QStringConverter::Utf8);
+   // cout.setEncoding(QStringConverter::Utf8);
 
     QString fileName = QCoreApplication::applicationFilePath();
     QFileInfo fileInfo(fileName);
