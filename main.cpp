@@ -23,15 +23,21 @@ int main(int argc, char *argv[])
     QFileInfo fileInfo(fileName);
     fileName = fileInfo.fileName();
 
+    // Если первый аргумент "-help"
     if(QString(argv[1]) == "-help") {
+        // Напечатать справочную информацию
         printHelpMessage(cout, fileName);
     }
+    // Если первый аргумент "-test"
     else if(QString(argv[1]) == "-test") {
+        // Выполнить тесты
         printTests(cout);
     }
+    // Если аргумента три и второй не начинается с "-"
     else if(argc == 3 && !QString(argv[2]).startsWith("-")) {
         printExpanssion(cout, argv[1], argv[2]);
 
+        // Получить объяснение выражения
     }
     else {
         cout << ("Ошибка в синтаксисе команды. Подробнее: .\\" + fileName +  " -help");
