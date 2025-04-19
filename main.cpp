@@ -13,6 +13,8 @@ void printExpanssion(QTextStream& cout, const QString& inputFile, const QString&
 int main(int argc, char *argv[])
 {
     SetConsoleOutputCP(CP_UTF8);
+    QTextStream out(stdout);
+    out.setEncoding(QStringConverter::Utf8);
 
     QCoreApplication a(argc, argv);
     qDebug() << "ыыыыыыыыыыыы";
