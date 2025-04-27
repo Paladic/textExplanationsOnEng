@@ -16,6 +16,7 @@ public:
     ExpressionTranslator();
 
     static const QHash<OperationType, QString> Templates;
+    static QString replacePlaceholders(const QString &pattern, const QList<QString> &args, QRegularExpression& numberedPlaceholderRegex);
 };
 
 #endif // EXPRESSIONTRANSLATOR_H
