@@ -15,6 +15,7 @@ class ExpressionTranslator
 public:
     ExpressionTranslator();
 
+    static const QHash<OperationType, QString> Templates;
 };
 
 #endif // EXPRESSIONTRANSLATOR_H
