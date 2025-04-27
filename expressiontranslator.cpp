@@ -38,6 +38,15 @@ ExpressionTranslator::ExpressionTranslator()
 {
 
 }
+
+QString ExpressionTranslator::getExplanation(const QString& description, const QList<QString>& arguments)
+{
+    QString pattern = description;
+
+    QRegularExpression numberedPlaceholderRegex(R"(\{\s*(\d+)\s*\})");
+    return replacePlaceholders(pattern, arguments, numberedPlaceholderRegex);
+}
+
 QString ExpressionTranslator::replacePlaceholders(const QString &pattern, const QList<QString> &args, QRegularExpression& numberedPlaceholderRegex)
 {
     QString patternCopy = pattern;
