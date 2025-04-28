@@ -13,24 +13,24 @@ public:
     Expression(const QString inputXMLFile);
     QString ToQstring();
     void setExpression(const QString &newExpression);
-    QString getExpression() const;
+    const QString* getExpression() const;
 
-    QHash<QString, Variable> getVariables() const;
+    const QHash<QString, Variable>* getVariables() const;
     void setVariables(const QHash<QString, Variable> &newVariables);
 
-    QHash<QString, Function> getFunctions() const;
+    const QHash<QString, Function>* getFunctions() const;
     void setFunctions(const QHash<QString, Function> &newFunctions);
 
-    QHash<QString, Union> getUnions() const;
+    const QHash<QString, Union>* getUnions() const;
     void setUnions(const QHash<QString, Union> &newUnions);
 
-    QHash<QString, Structure> getStructures() const;
+    const QHash<QString, Structure>* getStructures() const;
     void setStructures(const QHash<QString, Structure> &newStructures);
 
-    QHash<QString, Class> getClasses() const;
+    const QHash<QString, Class>* getClasses() const;
     void setClasses(const QHash<QString, Class> &newClasses);
 
-    QHash<QString, Enum> getEnums() const;
+    const QHash<QString, Enum>* getEnums() const;
     void setEnums(const QHash<QString, Enum> &newEnums);
 
 private:
