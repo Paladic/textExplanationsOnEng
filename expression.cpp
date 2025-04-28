@@ -12,14 +12,14 @@ void Expression::setExpression(const QString &newExpression)
     expression = newExpression;
 }
 
-QString Expression::getExpression() const
+const QString* Expression::getExpression() const
 {
-    return expression;
+    return &expression;
 }
 
-QHash<QString, Variable> Expression::getVariables() const
+const QHash<QString, Variable>* Expression::getVariables() const
 {
-    return variables;
+    return &variables;
 }
 
 void Expression::setVariables(const QHash<QString, Variable> &newVariables)
@@ -27,9 +27,9 @@ void Expression::setVariables(const QHash<QString, Variable> &newVariables)
     variables = newVariables;
 }
 
-QHash<QString, Function> Expression::getFunctions() const
+const QHash<QString, Function>* Expression::getFunctions() const
 {
-    return functions;
+    return &functions;
 }
 
 void Expression::setFunctions(const QHash<QString, Function> &newFunctions)
@@ -37,9 +37,9 @@ void Expression::setFunctions(const QHash<QString, Function> &newFunctions)
     functions = newFunctions;
 }
 
-QHash<QString, Union> Expression::getUnions() const
+const QHash<QString, Union>* Expression::getUnions() const
 {
-    return unions;
+    return &unions;
 }
 
 void Expression::setUnions(const QHash<QString, Union> &newUnions)
@@ -47,9 +47,11 @@ void Expression::setUnions(const QHash<QString, Union> &newUnions)
     unions = newUnions;
 }
 
-QHash<QString, Structure> Expression::getStructures() const
 {
     return structures;
+const QHash<QString, Structure>* Expression::getStructures() const
+{
+    return &structures;
 }
 
 void Expression::setStructures(const QHash<QString, Structure> &newStructures)
@@ -57,9 +59,9 @@ void Expression::setStructures(const QHash<QString, Structure> &newStructures)
     structures = newStructures;
 }
 
-QHash<QString, Class> Expression::getClasses() const
+const QHash<QString, Class>* Expression::getClasses() const
 {
-    return classes;
+    return &classes;
 }
 
 void Expression::setClasses(const QHash<QString, Class> &newClasses)
@@ -67,9 +69,11 @@ void Expression::setClasses(const QHash<QString, Class> &newClasses)
     classes = newClasses;
 }
 
-QHash<QString, Enum> Expression::getEnums() const
 {
     return enums;
+const QHash<QString, Enum>* Expression::getEnums() const
+{
+    return &enums;
 }
 
 void Expression::setEnums(const QHash<QString, Enum> &newEnums)
