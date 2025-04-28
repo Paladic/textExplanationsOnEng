@@ -30,6 +30,42 @@ public:
     {}
 
     QString ToQstring();
+    bool isConst(const QString& str);
+    bool isVariable(const QString& str);
+    static bool isFunction(const QString& str)
+    {
+        bool ok = false;
+        if(str.contains('(') && str.endsWith(')')){
+            if(isIdentifier(str.left(str.indexOf('(')))) ok = true;
+            else throw TEException(ErrorType::InvalidSymbol, QList<QString>{str});
+        }
+        return ok;
+    }
+    bool isCustomTypeWithFields(const QString& str);
+    bool isEnum(const QString& str);
+    static bool isIdentifier(const QString& str)
+    {
+        bool isInd = true;
+        // Первый символ - латинская буква или _
+        if (str.isEmpty()) isInd = false;
+        else{
+            if (!(isLatinLetter(str[0]) || str[0] == '_')) {
+                isInd = false;
+            }
+            // Остальные символы - латинские буквы, цифры или _
+            for(int i = 0; i < str.length(); i++) {
+                if (!(isLatinLetter(str[i]) || str[i].isDigit() || str[i] == '_')) {
+                    isInd = false;
+                }
+            }
+        }
+        return isInd;
+    }
+
+    static bool isLatinLetter(const QChar c) {
+        // Явная проверка латинских букв
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
     void setExpression(const QString &newExpression);
     const QString* getExpression() const;
 
@@ -59,6 +95,7 @@ public:
 
     const Variable getVariableByNameFromCustomData(QString varName, QString dataName) const;
     const Function getFunctionByNameFromCustomData(QString funcName, QString dataName) const;
+    bool isEnumValue(const QString& value, const QString& enumName) const;
 
     const CustomTypeWithFields getCustomTypeByName(const QString &typeName) const;
 

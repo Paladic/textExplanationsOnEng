@@ -121,6 +121,13 @@ const Function Expression::getFunctionByNameFromCustomData(QString funcName, QSt
     return customType.functions.value(funcName);
 }
 
+bool Expression::isEnumValue(const QString &value, const QString &enumName) const
+{
+    bool ok = false;
+    if(getEnumByName(enumName).values.contains(value)) ok = true;
+    return ok;
+}
+
 const CustomTypeWithFields Expression::getCustomTypeByName(const QString &typeName) const
 {
     CustomTypeWithFields type;
@@ -184,3 +191,45 @@ QString Expression::ToQstring()
 
     return result;
 }
+bool Expression::isConst(const QString &str)
+{
+    //...Считаем что строка не является константой
+    bool ok = false;
+    // Если строку можно перевести в число, то
+    if(str.toInt() || str.toFloat() || str.toDouble()){
+        // строка является константой
+        ok = true;
+    }
+    return ok;
+}
+
+bool Expression::isVariable(const QString &str)
+{
+    bool ok = false;
+    if(isIdentifier(str)){
+        ok = true;
+    }
+    else throw TEException(ErrorType::InvalidSymbol, QList<QString>{str});
+    return ok;
+}
+
+
+
+bool Expression::isCustomTypeWithFields(const QString &str)
+{
+    bool ok = false;
+    if(getCustomTypeByName(str).name != ""){
+        ok = true;
+    }
+    return ok;
+}
+
+bool Expression::isEnum(const QString &str)
+{
+    bool ok = false;
+    if(getEnumByName(str).name != ""){
+        ok = true;
+    }
+    return ok;
+}
+
