@@ -246,3 +246,13 @@ QList<QString> Expression::argsToDescr(const QList<ExpressionNode *> *functionAr
     }
     return descriptions;
 }
+
+OperationType Expression::getOperationTypeByStr(const QString &str)
+{
+    OperationType type = OperationType::None;
+    if(OperationMap.contains(str)){
+        type = OperationMap.value(str).type;
+    }
+    return type;
+}
+

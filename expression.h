@@ -69,6 +69,7 @@ public:
     
     QList<QString> argsToDescr(const QList<ExpressionNode *> *functionArgs, QString customDataType = "") const;
 
+    OperationType getOperationTypeByStr(const QString& str);
     void setExpression(const QString &newExpression);
     const QString* getExpression() const;
 
