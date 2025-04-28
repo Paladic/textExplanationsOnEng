@@ -30,6 +30,9 @@ public:
     {}
 
     QString ToQstring();
+    QString ToExplanation(const ExpressionNode *node, const QString& className = "", OperationType parentOperType = OperationType::None) const;
+
+    QString getExplanationInEn();
     EntityType getEntityTypeByStr(const QString& str);
     bool isConst(const QString& str);
     bool isVariable(const QString& str);
