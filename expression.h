@@ -9,18 +9,7 @@
 
 class Expression
 {
-
-    QString expression; // Текстовое выражение
-    QHash<QString, Variable> variables; //  Переменные
-    QHash<QString, Function> functions; // функции
-    // Пользовательские типы
-    QHash<QString, Union> unions; // Объединения
-    QHash<QString, Structure> structures; // Структуры
-    QHash<QString, Class> classes; // Классы
-    QHash<QString, Enum> enums; // Перечисления
-
 public:
-
     Expression(const QString inputXMLFile);
     QString ToQstring();
     void setExpression(const QString &newExpression);
@@ -43,6 +32,16 @@ public:
 
     QHash<QString, Enum> getEnums() const;
     void setEnums(const QHash<QString, Enum> &newEnums);
+
+private:
+    QString expression; // Текстовое выражение
+    QHash<QString, Variable> variables; //  Переменные
+    QHash<QString, Function> functions; // функции
+    // Пользовательские типы
+    QHash<QString, Union> unions; // Объединения
+    QHash<QString, Structure> structures; // Структуры
+    QHash<QString, Class> classes; // Классы
+    QHash<QString, Enum> enums; // Перечисления
 };
 
 #endif // EXPRESSION_H
