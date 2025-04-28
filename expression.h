@@ -66,6 +66,9 @@ public:
         // Явная проверка латинских букв
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
     }
+    
+    QList<QString> argsToDescr(const QList<ExpressionNode *> *functionArgs, QString customDataType = "") const;
+
     void setExpression(const QString &newExpression);
     const QString* getExpression() const;
 

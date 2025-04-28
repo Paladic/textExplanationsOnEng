@@ -233,3 +233,16 @@ bool Expression::isEnum(const QString &str)
     return ok;
 }
 
+
+
+
+
+QList<QString> Expression::argsToDescr(const QList<ExpressionNode *> *functionArgs, QString customDataType) const
+{
+    QList<QString> descriptions;
+    QList<ExpressionNode *>::const_iterator i;
+    for(i = functionArgs->constBegin(); i != functionArgs->constEnd(); i++){
+        descriptions.append(ToExplanation(*i));
+    }
+    return descriptions;
+}
