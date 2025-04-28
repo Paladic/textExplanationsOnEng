@@ -30,6 +30,7 @@ public:
     {}
 
     QString ToQstring();
+    EntityType getEntityTypeByStr(const QString& str);
     bool isConst(const QString& str);
     bool isVariable(const QString& str);
     static bool isFunction(const QString& str)
