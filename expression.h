@@ -1,11 +1,11 @@
 #ifndef EXPRESSION_H
 #define EXPRESSION_H
-
-#include "codeentity.h"
+#include "expressionnode.h"
+#include "teexception.h"
 
 #include <QHash>
 #include <QString>
-
+#include <QStack>
 
 class Expression
 {
