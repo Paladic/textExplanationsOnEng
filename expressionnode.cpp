@@ -42,8 +42,69 @@ QString ExpressionNode::toString() const {
 
     return result;
 }
+
+
+
+OperationType ExpressionNode::getOperType() const {
+    return operType;
+}
+
+EntityType ExpressionNode::getNodeType() const {
+    return nodeType;
+}
+
+QString ExpressionNode::getValue() const {
+    return value;
+}
+
+QString ExpressionNode::getDataType() const {
+    return dataType;
+}
+
+QList<ExpressionNode*>* ExpressionNode::getFunctionArgs() const {
+    return FunctionArgs;
+}
+
+ExpressionNode* ExpressionNode::getRightNode() const {
+    return right;
+}
+
+ExpressionNode* ExpressionNode::getLeftNode() const {
+    return left;
+}
+
+void ExpressionNode::setOperType(OperationType newOperType) {
+    operType = newOperType;
+}
+
+void ExpressionNode::setNodeType(EntityType newNodeType) {
+    nodeType = newNodeType;
+}
+
+void ExpressionNode::setValue(QString newValue) {
+    value = newValue;
+}
+
+void ExpressionNode::setDataType(QString newDataType) {
+    dataType = newDataType;
+}
+
+void ExpressionNode::setFunctionArgs(QList<ExpressionNode*>* newFunctionArgs) {
+    FunctionArgs = newFunctionArgs;
+}
+
+void ExpressionNode::setRightNode(ExpressionNode* newRightNode) {
+    right = newRightNode;
+}
+
+void ExpressionNode::setLeftNode(ExpressionNode* newLeftNode) {
+    left = newLeftNode;
+}
+
 bool ExpressionNode::operator!=(const ExpressionNode& other) const {
     return !(*this == other);
+}
+
 bool ExpressionNode::operator==(const ExpressionNode& other) const {
     // Сравниваем основные поля узла
     bool areBasicFieldsEqual =
@@ -66,6 +127,7 @@ bool ExpressionNode::operator==(const ExpressionNode& other) const {
     // Итоговое сравнение
     return areBasicFieldsEqual && areLeftNodesEqual && areRightNodesEqual && areFunctionArgsEqual;
 }
+
 // Вспомогательная функция для сравнения списков аргументов функции
 bool ExpressionNode::compareFunctionArgs(const QList<ExpressionNode*>& args1, const QList<ExpressionNode*>& args2) const {
     if (args1.size() != args2.size()) {
