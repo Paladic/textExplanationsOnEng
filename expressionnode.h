@@ -6,6 +6,7 @@ class ExpressionNode
 public:
     ExpressionNode();
     ExpressionNode(EntityType nodeType, const QString& value,  ExpressionNode* left = nullptr, ExpressionNode* right = nullptr, const QString& dataType = "", OperationType operType = OperationType::None, QList<ExpressionNode*>* functionArgs = {});
+    QString toString() const;
     bool operator ==(const ExpressionNode& other) const;
     bool operator !=(const ExpressionNode &other) const;
     bool compareFunctionArgs(const QList<ExpressionNode *> &args1, const QList<ExpressionNode *> &args2) const;
