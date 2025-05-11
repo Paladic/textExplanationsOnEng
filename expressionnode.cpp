@@ -10,6 +10,16 @@ ExpressionNode::ExpressionNode()
     operType(OperationType::None),
     dataType(""),
     FunctionArgs(nullptr) {}
+
+ExpressionNode::ExpressionNode(EntityType nodeType, const QString &value, ExpressionNode *left, ExpressionNode *right, const QString &dataType, OperationType operType, QList<ExpressionNode *> *functionArgs)
+    : value(value),
+    right(right),
+    left(left),
+    nodeType(nodeType),
+    operType(operType),
+    dataType(dataType),
+    FunctionArgs(functionArgs) {}
+
 QString ExpressionNode::toString() const {
     QString result;
 
