@@ -1,5 +1,7 @@
 #ifndef EXPRESSIONNODE_H
 #define EXPRESSIONNODE_H
+#include <QString>
+#include "codeentity.h"
 
 class ExpressionNode
 {
@@ -26,6 +28,7 @@ public:
 
     bool operator ==(const ExpressionNode& other) const;
     bool operator !=(const ExpressionNode &other) const;
+
     bool compareFunctionArgs(const QList<ExpressionNode *> &args1, const QList<ExpressionNode *> &args2) const;
 private:
     QString value; // содержание ноды
