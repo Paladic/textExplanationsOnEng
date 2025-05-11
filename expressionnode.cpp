@@ -1,6 +1,15 @@
 #include "expressionnode.h"
 
-ExpressionNode::ExpressionNode() {}
+// Конструктор по умолчанию
+ExpressionNode::ExpressionNode()
+    : value(""),
+    right(nullptr),
+    left(nullptr),
+
+    nodeType(EntityType::Undefined),
+    operType(OperationType::None),
+    dataType(""),
+    FunctionArgs(nullptr) {}
 bool ExpressionNode::operator!=(const ExpressionNode& other) const {
     return !(*this == other);
 bool ExpressionNode::operator==(const ExpressionNode& other) const {
