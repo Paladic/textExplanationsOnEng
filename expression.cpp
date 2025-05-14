@@ -1,5 +1,7 @@
 #include "expression.h"
 #include "expressionxmlparser.h"
+#include "expressiontranslator.h"
+
 
 Expression::Expression(const QString inputXMLFile) {
 
@@ -283,6 +285,21 @@ QString Expression::ToExplanation(const ExpressionNode *node, const QString& cla
     //Вернуть описание
     return description;
 }
+
+QString Expression::getExplanationInEn()
+{
+    //...Считать что объяснение пустое
+    QString explanation = "";
+    // Преобразовать выражение в дерево
+    ExpressionNode* explanationTree = this->expressionToNodes();
+    // Получить объяснение выражения
+    explanation = this->ToExplanation(explanationTree);
+
+    // Удалить дубликаты слов в полученном выражении
+    explanation = removeDuplicates(explanation);
+    return explanation;
+}
+
 ExpressionNode* Expression::expressionToNodes() {
     // Разделяем выражение на лексемы
     QStringList tokens = expression.split(' ', Qt::SkipEmptyParts);
