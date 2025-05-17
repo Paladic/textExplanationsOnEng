@@ -1,14 +1,21 @@
 #include "expression.h"
+#include "qdir.h"
 #include "teexception.h"
+#include <QStringConverter>
+#include <QTextStream>
 
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <windows.h>
 #include <conio.h>
+#include <QTextStream>
+//#include <QQmlApplicationEngine>
+
 
 void printHelpMessage(QTextStream& cout, const QString& filename);
 void printTests(QTextStream& cout);
 void printExpanssion(QTextStream& cout, const QString& inputFile, const QString& outputFile);
+
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +26,8 @@ int main(int argc, char *argv[])
     out.setEncoding(QStringConverter::Utf8);
 
     QCoreApplication a(argc, argv);
+
+
     qDebug() << "ыыыыыыыыыыыы";
     QTextStream cout(stdout);
    // cout.setEncoding(QStringConverter::Utf8);
@@ -26,6 +35,7 @@ int main(int argc, char *argv[])
     QString fileName = QCoreApplication::applicationFilePath();
     QFileInfo fileInfo(fileName);
     fileName = fileInfo.fileName();
+
 
     // Если первый аргумент "-help"
     if(QString(argv[1]) == "-help") {
@@ -39,8 +49,6 @@ int main(int argc, char *argv[])
     }
     // Если аргумента три и второй не начинается с "-"
     else if(argc == 3 && !QString(argv[2]).startsWith("-")) {
-        printExpanssion(cout, argv[1], argv[2]);
-
         // Получить объяснение выражения
     }
     else {
@@ -57,13 +65,14 @@ void printTests(QTextStream& cout){
     return;
 }
 
+
 void printExpanssion(QTextStream& cout, const QString& inputFile, const QString& outputFile){
 
     try {
-        Expression expr = Expression(inputFile);
-        cout << "\nparse: success\n\n";
-        cout << expr.ToQstring();
-        cout << "\nfinal: success";
+        // Expression expr = Expression(inputFile);
+        // cout << "\nparse: success\n\n";
+        // cout << expr.ToQstring();
+        // cout << "\nfinal: success";
     }
     catch(TEException exception) {
         cout << exception.what();
