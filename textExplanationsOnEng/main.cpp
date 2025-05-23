@@ -27,6 +27,9 @@ int main(int argc, char *argv[])
 
     QCoreApplication a(argc, argv);
 
+    #if defined(TESTS)
+        return runTest(argc, argv);
+    #endif
 
     qDebug() << "ыыыыыыыыыыыы";
     QTextStream cout(stdout);
