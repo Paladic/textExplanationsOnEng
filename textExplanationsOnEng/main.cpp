@@ -31,14 +31,11 @@ int main(int argc, char *argv[])
         return runTest(argc, argv);
     #endif
 
-    qDebug() << "ыыыыыыыыыыыы";
     QTextStream cout(stdout);
-   // cout.setEncoding(QStringConverter::Utf8);
 
     QString fileName = QCoreApplication::applicationFilePath();
     QFileInfo fileInfo(fileName);
     fileName = fileInfo.fileName();
-
 
     // Если первый аргумент "-help"
     if(QString(argv[1]) == "-help") {
