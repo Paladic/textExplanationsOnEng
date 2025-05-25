@@ -69,10 +69,11 @@ void printTests(QTextStream& cout){
 void printExplanation(QTextStream& cout, const QString& inputFile, const QString& outputFile){
 
     try {
+        // Считать входной файл
         // Expression expr = Expression(inputFile);
-        // cout << "\nparse: success\n\n";
-        // cout << expr.ToQstring();
-        // cout << "\nfinal: success";
+        // // Получить объяснение выражения
+        // cout << expr.getExplanationInEn();
+        //cout << "\nfinal: success";
     }
     catch(TEException exception) {
         cout << exception.what();
