@@ -2,6 +2,7 @@
 #include <QTest>
 #include "test_isfunction.h"
 #include "test_isidentifier.h"
+#include "test_removeduplicates.h"
 int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер тестов нашёл этот тест, поэтому запускаем мы его из main
 {
 
@@ -15,6 +16,11 @@ int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер т�
     try {
         test_isIdentifier isIdentifier;
         result |= QTest::qExec(&isIdentifier, argc, argv);
+    } catch (...) {}
+
+    try {
+        test_removeDuplicates removeDuplcates;
+        result |= QTest::qExec(&removeDuplcates, argc, argv);
     } catch (...) {}
     return result;
 }
