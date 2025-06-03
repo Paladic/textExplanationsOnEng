@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QTest>
 #include "test_isfunction.h"
+#include "test_expressiontonodes.h"
 #include "test_getexplanation.h"
 #include "test_iscustomtypewithfileds.h"
 #include "test_isidentifier.h"
@@ -13,6 +14,11 @@ int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер т�
     try {
         test_isFunction function;
         result |= QTest::qExec(&function, argc, argv);
+    } catch (...) {}
+
+    try {
+        test_expressionToNodes expressionToNodes;
+        result |= QTest::qExec(&expressionToNodes, argc, argv);
     } catch (...) {}
 
     try {
