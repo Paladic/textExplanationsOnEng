@@ -6,6 +6,8 @@
 #include "test_iscustomtypewithfileds.h"
 #include "test_isidentifier.h"
 #include "test_removeduplicates.h"
+#include "test_toexplanation.h"
+
 int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер тестов нашёл этот тест, поэтому запускаем мы его из main
 {
 
@@ -39,6 +41,12 @@ int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер т�
         test_removeDuplicates removeDuplcates;
         result |= QTest::qExec(&removeDuplcates, argc, argv);
     } catch (...) {}
+
+    try {
+        test_toExplanation toExplanation;
+        result |= QTest::qExec(&toExplanation, argc, argv);
+    } catch (...) {}
+
     return result;
 }
 
