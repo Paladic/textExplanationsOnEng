@@ -3,6 +3,7 @@
 #include "test_isfunction.h"
 #include "test_expressiontonodes.h"
 #include "test_getexplanation.h"
+#include "test_getexplanationinen.h"
 #include "test_iscustomtypewithfileds.h"
 #include "test_isidentifier.h"
 #include "test_removeduplicates.h"
@@ -27,6 +28,12 @@ int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер т�
         test_getExplanation getExplanation;
         result |= QTest::qExec(&getExplanation, argc, argv);
     } catch (...) {}
+
+    try {
+        test_getExplanationInEn getExplanationInEn;
+        result |= QTest::qExec(&getExplanationInEn, argc, argv);
+    } catch (...) {}
+
     try {
         test_isCustomTypeWithFileds customTypeWithFields;
         result |= QTest::qExec(&customTypeWithFields, argc, argv);
