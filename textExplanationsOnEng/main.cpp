@@ -20,16 +20,14 @@ void printExplanation(QTextStream& cout, const QString& inputFile, const QString
 int main(int argc, char *argv[])
 {
     SetConsoleOutputCP(CP_UTF8);
-    QTextStream out(stdout);
-    out.setEncoding(QStringConverter::Utf8);
+    QTextStream cout(stdout);
+    cout.setEncoding(QStringConverter::Utf8);
 
     QCoreApplication a(argc, argv);
 
     #if defined(TESTS)
         return runTest(argc, argv);
     #endif
-
-    QTextStream cout(stdout);
 
     QString fileName = QCoreApplication::applicationFilePath();
     QFileInfo fileInfo(fileName);
