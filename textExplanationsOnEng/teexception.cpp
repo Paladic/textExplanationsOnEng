@@ -54,9 +54,9 @@ QString TEException::what() const {
 
     QString message = "Error: ";
 
-    if(this->filename != ""){
-        message += "\"" + this->filename + "\"" + (this->line > 0? " line " + QString::number(this->line) : "") + ": ";
-    }
+    if(this->filename != "") message += "in \"" + this->filename + "\" ";
+
+    if(this->line > 0) message += "in line " + QString::number(this->line) + ": ";
 
     switch(this->errorType) {
 
@@ -64,7 +64,7 @@ QString TEException::what() const {
         message += "invalid input file path. The file may not exist or there is no read access.";
         break;
     case ErrorType::InputCopyFileCannotBeCreated:
-        message += "";
+        message += "Failed to create a copy of the file {1} in \"{2}\". There may be no write permissions";
         break;
     case ErrorType::OutputFileCannotBeCreated:
         message += "Invalid output file path. The specified location may not exist or there are no write permissions.";
