@@ -67,9 +67,9 @@ QString TEException::what() const {
         message += "";
         break;
     case ErrorType::OutputFileCannotBeCreated:
-        message += "invalid output file path. The specified location may not exist or there are no write permissions.";
+        message += "Invalid output file path. The specified location may not exist or there are no write permissions.";
         break;
-    case ErrorType::Parssing:
+    case ErrorType::Parsing:
         message += "a syntax error was detected while processing an XML file.";
         break;
     case ErrorType::MissingRootElemnt:
@@ -105,6 +105,9 @@ QString TEException::what() const {
     case ErrorType::InputSizeExceeded:
         message += "the text value \"{1}\" exceeded the allowed length. Current - {2}, Expected - {3}.";
         break;
+    case ErrorType::InputElementsExceeded:
+        message += "the element <{1}> exceeds the allowed number of elements. Current count - {2}, Expected count - {3}.";
+        break;
     case ErrorType::UndefinedId:
         message += "the identifier \"{1}\" is not defined in the value of the <expression> element.";
         break;
@@ -112,16 +115,16 @@ QString TEException::what() const {
         message += "the value of the <expression> element contains an invalid character \"{1}\".";
         break;
     case ErrorType::MissingOperand:
-        message += "in the context of the <expression> element, the operand \"{1}\" lacks an operation.";
+        message += "in the context of the <expression> element, the operation \"{1}\" lacks an operands.";
         break;
     case ErrorType::MissingOperations:
-        message += "in the context of the <expression> element, the operation \"{1}\" lacks an operands.";
+        message += "in the context of the <expression> element, the operand \"{1}\" lacks an operation.";
         break;
     case ErrorType::MultipleIncrementDecrement:
         message += "in the context of the <expression> element, the value of the \"{1}\" element cannot be incremented or decremented more than once.";
         break;
     case ErrorType::NeverUsedElement:
-        message += "element with name \"{1}\" never occurs in element <expression>";
+        message += "elements: {1} never occurs in element <expression>";
         break;
     case ErrorType::ParamsCountDescriptionDifference:
         message += "the number of substitutions of sections in the <description> of the <function> element by the description of incoming arguments exceeds the value of the \"paramsCount\" attribute of the <function> element.";
@@ -135,8 +138,14 @@ QString TEException::what() const {
     case ErrorType::UnidentifedType:
         message += "the \"{1}\" value of the \"type\" attribute contains an unidentified type. The data type must be one of the supported types or it can be a user-defined data type described in the elements <unions>; <structures>; <classes>; <enums>.";
         break;
+    case ErrorType::InvalidType:
+        message += "The \"{1}\" value of the \"type\" attribute must begin with a Latin letter or the special character \"_\" (underscore) and contain only Latin letters, numbers, and the special character \"_\" (underscore).";
+        break;
     case ErrorType::InvalidParamsCount:
         message += "value \"{1}\" of the \"paramsCount\" attribute contains an invalid value. Expected: positive integer from 0 to 20 inclusive.";
+        break;
+    case ErrorType::VariableWithVoidType:
+        message += "the variable \"{1}\" has an invalid data type \"void\". The \"void\" data type can only be used for functions.";
         break;
     default:
         message += "unknown error";
