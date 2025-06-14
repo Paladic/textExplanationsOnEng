@@ -13,7 +13,7 @@ enum class ErrorType {
     OutputFileCannotBeCreated,      // Невозможно создать указанный выходной файл
 
     // Ошибки формата XML (общие)
-    Parssing,                       // Ошибка разбора XML
+    Parsing,                       // Ошибка разбора XML
     MissingRootElemnt,              // Отсутствие корневого элемента <root>
     UnexpectedElement,              // Присутствует элемент, который не должен быть в текущей вложенности
     UnexpectedAttribute,            // Присутствует атрибут, который не должен быть в текущем элементе
@@ -25,6 +25,7 @@ enum class ErrorType {
     EmptyAttributeName,             // Значение атрибута не заполнено
     ParamsCountFunctionMissmatch,   // Количество параметров в "expression" не соответствует "paramsCount"
     InputSizeExceeded,              // Превышен допустимый размер входных данных
+    InputElementsExceeded,          // Превышено допустимое количество элементов
 
     // Ошибки формата XML (элемент <expression>)
     UndefinedId,                // Используется переменная, функция или пользовательский тип, которые отсутствуют в соответствующих элементах
@@ -44,12 +45,12 @@ enum class ErrorType {
 
     // Ошибки формата XML (атрибут "type")
     UnidentifedType,    // В значении атрибута "type" указан неидентифицированный тип данных
+    InvalidType,        // // В значении атрибута "type" используются недопустимые символы
 
     // Ошибки формата XML (атрибут "paramsCount")
     InvalidParamsCount, // У атрибута "paramsCount" указан неправильный формат данных
-    MissingCases,       // У описания отсутствует обязательный падеж    28
     MissingReplacementArguments, // Отсутствие аргумента для замены
-    IncorrectCaseInPlaceHolder // Неправильно указан падеж в плейсхолдере
+    VariableWithVoidType        // Переменная с типом войд
 };
 
 class TEException

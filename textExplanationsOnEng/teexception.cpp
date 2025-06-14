@@ -24,7 +24,7 @@ const QHash<ErrorType, QString> TEException::ErrorTypeNames = {
     {ErrorType::InputFileNotFound, "InputFileNotFound"},
     {ErrorType::InputCopyFileCannotBeCreated, "InputCopyFileCannotBeCreated"},
     {ErrorType::OutputFileCannotBeCreated, "OutputFileCannotBeCreated"},
-    {ErrorType::Parssing, "Parssing"},
+    {ErrorType::Parsing, "Parsing"},
     {ErrorType::MissingRootElemnt, "MissingRootElemnt"},
     {ErrorType::UnexpectedElement, "UnexpectedElement"},
     {ErrorType::UnexpectedAttribute, "UnexpectedAttribute"},
@@ -48,7 +48,6 @@ const QHash<ErrorType, QString> TEException::ErrorTypeNames = {
     {ErrorType::InvalidName, "InvalidName"},
     {ErrorType::UnidentifedType, "UnidentifedType"},
     {ErrorType::InvalidParamsCount, "InvalidParamsCount"},
-    {ErrorType::MissingCases, "MissingCases"}
 };
 
 QString TEException::what() const {
