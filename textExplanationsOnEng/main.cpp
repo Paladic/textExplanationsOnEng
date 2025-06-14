@@ -50,6 +50,13 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+// Проверить доступ к файлу
+void checkFileAccess(const QString& filePath) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        throw TEException(ErrorType::OutputFileCannotBeCreated, QList<QString>{filePath});
+    }
+    file.close();
 }
 
 // Функция для записи текста в файл
