@@ -6,7 +6,7 @@
 #include "test_getexplanationinen.h"
 #include "test_iscustomtypewithfileds.h"
 #include "test_isidentifier.h"
-#include "test_removeduplicates.h"
+#include "test_removeconsecutiveduplicates.h"
 #include "test_toexplanation.h"
 
 int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер тестов нашёл этот тест, поэтому запускаем мы его из main
@@ -45,8 +45,8 @@ int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер т�
     } catch (...) {}
 
     try {
-        test_removeDuplicates removeDuplcates;
-        result |= QTest::qExec(&removeDuplcates, argc, argv);
+        test_removeConsecutiveDuplicates removeConsecutiveDuplicates;
+        result |= QTest::qExec(&removeConsecutiveDuplicates, argc, argv);
     } catch (...) {}
 
     try {
@@ -59,9 +59,3 @@ int runTest(int argc, char *argv[]) //-- Нужно, чтобы парсер т�
 
 #define TESTS
 #include "../textExplanationsOnEng/main.cpp"
-
-
-
-
-
-

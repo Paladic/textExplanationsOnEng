@@ -500,3 +500,25 @@ OperationType Expression::getOperationTypeByStr(const QString &str)
     return type;
 }
 
+QString Expression::removeConsecutiveDuplicates(const QString &str)
+{
+    // Разделить строку на отдельные слова
+    QStringList words = str.split(' ', Qt::SkipEmptyParts);
+    QStringList copyOfWords = str.toLower().split(' ', Qt::SkipEmptyParts);
+
+
+    QStringList seenWords;
+    QStringList result;
+
+    // Для каждого слова в строке
+    for (int i = 0; i < words.count(); i++) {
+        // Если предыдущее слово в строке не совпадает с текущим или заканчивается запятой
+        if (!seenWords.endsWith(copyOfWords[i]) || (copyOfWords[i].endsWith(","))) {
+            // Запоминаем его и добавляем в результирующую строку
+            seenWords.append(copyOfWords[i]);
+            result.append(words[i]);
+        }
+    }
+    return result.join(" ");
+}
+

@@ -77,11 +77,7 @@ public:
 
     OperationType getOperationTypeByStr(const QString& str);
 
-    static QString removeDuplicates(const QString &str)
-    {
-        return str;
-    }
-
+    static QString removeConsecutiveDuplicates(const QString &str);
     void setExpression(const QString &newExpression);
     const QString* getExpression() const;
 
