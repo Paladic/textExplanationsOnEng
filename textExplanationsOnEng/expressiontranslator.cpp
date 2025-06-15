@@ -44,9 +44,6 @@ QString ExpressionTranslator::getExplanation(const QString& description, const Q
     QString pattern = description;
 
     QRegularExpression numberedPlaceholderRegex(R"(\{\s*(\d+)\s*\})");
-    return replacePlaceholders(pattern, arguments, numberedPlaceholderRegex);
-}
-
     QRegularExpressionMatchIterator it = numberedPlaceholderRegex.globalMatch(pattern);
 
     // Пока есть вхождения плейсхолдера
@@ -54,7 +51,15 @@ QString ExpressionTranslator::getExplanation(const QString& description, const Q
         QRegularExpressionMatch match = it.next();
         int index = match.captured(1).toInt() - 1;
         QString caseStr = match.captured(2);
+        // Если индекс в плейсхолдере корректный
+        if (index >= 0 && index < arguments.size()) {
+            QString replacement = arguments[index];
+            // Заменить плейсхолдер в результирующей строке на соответствующий аргумент
+            pattern.replace(match.captured(0), replacement);
         }
+        // Иначе вызвать ошибку
+        else throw TEException(ErrorType::MissingReplacementArguments, QList<QString>{pattern});
     }
+    return pattern;
 }
 
