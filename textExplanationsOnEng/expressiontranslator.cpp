@@ -47,9 +47,6 @@ QString ExpressionTranslator::getExplanation(const QString& description, const Q
     return replacePlaceholders(pattern, arguments, numberedPlaceholderRegex);
 }
 
-QString ExpressionTranslator::replacePlaceholders(const QString &pattern, const QList<QString> &args, QRegularExpression& numberedPlaceholderRegex)
-{
-    QString patternCopy = pattern;
     QRegularExpressionMatchIterator it = numberedPlaceholderRegex.globalMatch(pattern);
 
     // Пока есть вхождения плейсхолдера
@@ -57,14 +54,7 @@ QString ExpressionTranslator::replacePlaceholders(const QString &pattern, const 
         QRegularExpressionMatch match = it.next();
         int index = match.captured(1).toInt() - 1;
         QString caseStr = match.captured(2);
-
-        if (index >= 0 && index < args.size()) {
-            QString replacement = args[index];
-
-            // Заменить плейсхолдер в результирующей строке на соответствующий аргумент в указанном падеже
-            patternCopy.replace(match.captured(0), replacement);
         }
     }
-    return patternCopy;
 }
 
