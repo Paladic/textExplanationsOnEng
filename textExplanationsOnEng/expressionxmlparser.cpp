@@ -7,24 +7,24 @@ const QList<QString> ExpressionXmlParser::supportedDataTypesForVar = { "int", "f
 
 void ExpressionXmlParser::readDataFromXML(const QString& inputFilePath, Expression &expression) {
 
-    QDomDocument doc = readXML(inputFilePath);
-
-    parseQDomDocument(doc, expression);
+    QList<TEException> errors;
 
     try {
 
+        QDomDocument doc = readXML(inputFilePath, errors);
+        parseQDomDocument(doc, expression, errors);
     }
-    catch(TEException exception) {
-        throw TEException(exception.getErrorType(), inputFilePath, exception.getLine(), exception.getArgs());
-    }
+    catch(...) {}
+
+    if(errors.count() > 0) throw errors;
 }
 
-QDomDocument ExpressionXmlParser::readXML(const QString& inputFilePath) {
+QDomDocument ExpressionXmlParser::readXML(const QString& inputFilePath, QList<TEException>& errors) {
 
     if(inputFilePath.isEmpty())
-        throw TEException(ErrorType::InputFileNotFound, inputFilePath);
+        errors.append(TEException(ErrorType::InputFileNotFound, inputFilePath));
 
-    QTemporaryFile* tmpFilePath = createTempCopy(inputFilePath);
+    QTemporaryFile* tmpFilePath = createTempCopy(inputFilePath, errors);
 
     tmpFilePath->open();
     QString xmlContent = tmpFilePath->readAll();
@@ -37,7 +37,8 @@ QDomDocument ExpressionXmlParser::readXML(const QString& inputFilePath) {
     //std::cout << xmlContent.toStdString();
     if (!doc.setContent(xmlContent, &errorMsg, &errorLine, &errorColumn)) {
         delete tmpFilePath;
-        throw TEException(ErrorType::Parssing, inputFilePath, errorLine);
+        errors.append(TEException(ErrorType::Parsing, inputFilePath, errorLine));
+        throw NULL;
     }
 
     delete tmpFilePath;
@@ -68,20 +69,22 @@ bool ExpressionXmlParser::checkFileReadAccess(const QString &filePath)
 
 }
 
-QTemporaryFile *ExpressionXmlParser::createTempCopy(const QString &sourceFilePath) {
+QTemporaryFile *ExpressionXmlParser::createTempCopy(const QString &sourceFilePath, QList<TEException>& errors) {
 
     QTemporaryFile* tempFile = new QTemporaryFile(QDir(QCoreApplication::applicationDirPath()).filePath("temp_XXXXXX"));
     //tempFile->setAutoRemove(true);
 
     if (!tempFile->open()) {
         delete tempFile;
-        throw TEException(ErrorType::InputCopyFileCannotBeCreated);
+        errors.append(TEException(ErrorType::InputCopyFileCannotBeCreated, QList<QString>{sourceFilePath, QCoreApplication::applicationDirPath()}));
+        throw NULL;
     }
 
     // Открываем исходный файл для чтения
     QFile sourceFile(sourceFilePath);
     if (!sourceFile.open(QIODevice::ReadOnly)){
-        throw TEException(ErrorType::InputFileNotFound);
+        errors.append(TEException(ErrorType::InputFileNotFound, sourceFilePath));
+        throw NULL;
     }
 
     tempFile->write(sourceFile.readAll());
@@ -166,42 +169,41 @@ QString ExpressionXmlParser::fixXmlDescriptions(const QString& xmlString) {
     return result;
 }
 
-void ExpressionXmlParser::parseQDomDocument(const QDomDocument& doc, Expression &expression) {
+void ExpressionXmlParser::parseQDomDocument(const QDomDocument& doc, Expression &expression, QList<TEException>& errors) {
 
     QDomElement root = doc.documentElement();
     if (root.isNull() || root.tagName() != "root") {
-        throw TEException(ErrorType::MissingRootElemnt);
+        errors.append(TEException(ErrorType::MissingRootElemnt));
+        throw NULL;
     }
 
-    validateElement(root, QList<QString>{}, QHash<QString, int>{{"expression", 1}, {"variables", 1}, {"functions", 1}, {"unions", 1}, {"structures", 1}, {"classes", 1}, {"enums", 1}});
+    validateElement(root, QList<QString>{}, QHash<QString, int>{{"expression", 1}, {"variables", 1}, {"functions", 1}, {"unions", 1}, {"structures", 1}, {"classes", 1}, {"enums", 1}}, errors);
 
-    expression.setExpression(parseExpression(root.firstChildElement("expression")));
-    expression.setVariables(parseVariables(root.firstChildElement("variables")));
-    expression.setFunctions(parseFunctions(root.firstChildElement("functions")));
-    expression.setUnions(parseUnions(root.firstChildElement("unions")));
-    expression.setStructures(parseStructures(root.firstChildElement("structures")));
-    expression.setClasses(parseClasses(root.firstChildElement("classes")));
-    expression.setEnums(parseEnums(root.firstChildElement("enums")));
-
+    expression.setExpression(parseExpression(root.firstChildElement("expression"), errors));
+    expression.setVariables(parseVariables(root.firstChildElement("variables"), errors));
+    expression.setFunctions(parseFunctions(root.firstChildElement("functions"), errors));
+    expression.setUnions(parseUnions(root.firstChildElement("unions"), errors));
+    expression.setStructures(parseStructures(root.firstChildElement("structures"), errors));
+    expression.setClasses(parseClasses(root.firstChildElement("classes"), errors));
+    expression.setEnums(parseEnums(root.firstChildElement("enums"), errors));
 }
 
-QString ExpressionXmlParser::parseExpression(const QDomElement &_expression)
+QString ExpressionXmlParser::parseExpression(const QDomElement &_expression, QList<TEException>& errors)
 {
     QString res = _expression.text();
     if(res.isEmpty() || res.length() < 1)
-        throw TEException(ErrorType::EmptyElementValue, _expression.lineNumber());
+        errors.append(TEException(ErrorType::EmptyElementValue, _expression.lineNumber(), QList<QString>{"expression"}));
 
 
-    if(res.length() > expressionMaxLength) throw TEException(ErrorType::InputSizeExceeded, _expression.lineNumber(), QList<QString>{"description", QString::number(res.length()), QString::number(expressionMaxLength)});
+    if(res.length() > expressionMaxLength) errors.append(TEException(ErrorType::InputSizeExceeded, _expression.lineNumber(), QList<QString>{"expression", QString::number(res.length()), QString::number(expressionMaxLength)}));
 
 
     return res;
 }
 
-QHash<QString, Variable> ExpressionXmlParser::parseVariables(const QDomElement &_variables)
+QHash<QString, Variable> ExpressionXmlParser::parseVariables(const QDomElement &_variables, QList<TEException>& errors)
 {
-
-    validateElement(_variables, QList<QString>{}, QHash<QString, int>{{"variable", childElementsMaxCount}}, false);
+    validateElement(_variables, QList<QString>{}, QHash<QString, int>{{"variable", childElementsMaxCount}}, errors, false);
 
     QHash<QString, Variable> result;
     if(_variables.childNodes().isEmpty()) return result;
@@ -209,31 +211,29 @@ QHash<QString, Variable> ExpressionXmlParser::parseVariables(const QDomElement &
     QDomNode childNode = _variables.firstChild();
     while (!childNode.isNull()) {
 
-        Variable child = parseVariable(childNode.toElement());
+        Variable child = parseVariable(childNode.toElement(), errors);
         result.insert(child.name, child);
         childNode = childNode.nextSibling();
     }
-
     return result;
-
 }
 
-Variable ExpressionXmlParser::parseVariable(const QDomElement &_variable)
+Variable ExpressionXmlParser::parseVariable(const QDomElement &_variable, QList<TEException>& errors)
 {
 
-    validateElement(_variable, QList<QString>{"name", "type"}, QHash<QString, int>{{"description", 1}}, true);
+    validateElement(_variable, QList<QString>{"name", "type"}, QHash<QString, int>{{"description", 1}}, errors, true);
 
-    QString name = parseName(_variable);
+    QString name = parseName(_variable, errors);
     QString type = _variable.attribute("type");
-    QString desc = parseDescription(_variable.firstChildElement("description"));
+    QDomElement descr = _variable.firstChildElement("description");
 
+    QString desc = parseDescription(_variable.firstChildElement("description"), errors);
     return Variable(name, type, desc);
 }
 
-QHash<QString, Function> ExpressionXmlParser::parseFunctions(const QDomElement &_functions)
+QHash<QString, Function> ExpressionXmlParser::parseFunctions(const QDomElement &_functions, QList<TEException>& errors)
 {
-
-    validateElement(_functions, QList<QString>{}, QHash<QString, int>{{"function", childElementsMaxCount}}, false);
+    validateElement(_functions, QList<QString>{}, QHash<QString, int>{{"function", childElementsMaxCount}}, errors, false);
 
     QHash<QString, Function> result;
     if(_functions.childNodes().isEmpty()) return result;
@@ -241,66 +241,62 @@ QHash<QString, Function> ExpressionXmlParser::parseFunctions(const QDomElement &
     QDomNode childNode = _functions.firstChild();
     while (!childNode.isNull()) {
 
-        Function child = parseFunction(childNode.toElement());
+        Function child = parseFunction(childNode.toElement(), errors);
         result.insert(child.name, child);
 
         childNode = childNode.nextSibling();
     }
-
     return result;
-
 }
 
-Function ExpressionXmlParser::parseFunction(const QDomElement &_function)
+Function ExpressionXmlParser::parseFunction(const QDomElement &_function, QList<TEException>& errors)
 {
-    validateElement(_function, QList<QString>{"name", "type", "paramsCount"}, QHash<QString, int>{{"description", 1}}, true);
+    validateElement(_function, QList<QString>{"name", "type", "paramsCount"}, QHash<QString, int>{{"description", 1}}, errors, true);
 
-    QString name = parseName(_function);
-    QString type = _function.attribute("type");
-    int paramsCount = _function.attribute("paramsCount").toInt();
-    QString desc = parseDescription(_function.firstChildElement("description"));;
+    QString name = parseName(_function, errors);
+    QString type = parseType(_function, errors);
+    int paramsCount = parseParamsCount(_function, errors);
+    QString desc = parseDescription(_function.firstChildElement("description"), errors);
 
     return Function(name, type, paramsCount, desc);
 }
 
-QHash<QString, Union> ExpressionXmlParser::parseUnions(const QDomElement &_unions)
+QHash<QString, Union> ExpressionXmlParser::parseUnions(const QDomElement &_unions, QList<TEException>& errors)
 {
-    validateElement(_unions, QList<QString>{}, QHash<QString, int>{{"union", childElementsMaxCount}}, false);
+    validateElement(_unions, QList<QString>{}, QHash<QString, int>{{"union", childElementsMaxCount}}, errors, false);
 
     QHash<QString, Union> result;
     if(_unions.childNodes().isEmpty()) return result;
 
     QDomNode childNode = _unions.firstChild();
     while (!childNode.isNull()) {
-
-        Union child = parseUnion(childNode.toElement());
+        Union child = parseUnion(childNode.toElement(), errors);
         result.insert(child.name, child);
 
         childNode = childNode.nextSibling();
     }
-
     return result;
 }
 
-Union ExpressionXmlParser::parseUnion(const QDomElement &_union)
+Union ExpressionXmlParser::parseUnion(const QDomElement &_union, QList<TEException>& errors)
 {
-    validateElement(_union, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, true);
+    validateElement(_union, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, errors, true);
 
-    QString name = parseName(_union);
-    QHash<QString, Variable> variables = parseVariables(_union.firstChildElement("variables"));
-    QHash<QString, Function> functions = parseFunctions(_union.firstChildElement("functions"));
+    QString name = parseName(_union, errors);
+    QHash<QString, Variable> variables = parseVariables(_union.firstChildElement("variables"), errors);
+    QHash<QString, Function> functions = parseFunctions(_union.firstChildElement("functions"), errors);
 
     int elementsCount = variables.count() + functions.count();
     if(elementsCount > childElementsMaxCount)
-        throw TEException(ErrorType::InputSizeExceeded, _union.lineNumber(), QList<QString>{QString::number(elementsCount), QString::number(elementsCount), QString::number(childElementsMaxCount)});
+        errors.append(TEException(ErrorType::InputElementsExceeded, _union.lineNumber(), QList<QString>{"union", QString::number(elementsCount), QString::number(childElementsMaxCount)}));
 
     return Union(name, variables, functions);
 }
 
-QHash<QString, Structure> ExpressionXmlParser::parseStructures(const QDomElement &_structures)
+QHash<QString, Structure> ExpressionXmlParser::parseStructures(const QDomElement &_structures, QList<TEException>& errors)
 {
 
-    validateElement(_structures, QList<QString>{}, QHash<QString, int>{{"structure", childElementsMaxCount}}, false);
+    validateElement(_structures, QList<QString>{}, QHash<QString, int>{{"structure", childElementsMaxCount}}, errors, false);
 
     QHash<QString, Structure> result;
     if(_structures.childNodes().isEmpty()) return result;
@@ -308,36 +304,33 @@ QHash<QString, Structure> ExpressionXmlParser::parseStructures(const QDomElement
     QDomNode childNode = _structures.firstChild();
     while (!childNode.isNull()) {
 
-        Structure child = parseStructure(childNode.toElement());
+        Structure child = parseStructure(childNode.toElement(), errors);
         result.insert(child.name, child);
 
         childNode = childNode.nextSibling();
-
     }
-
     return result;
-
 }
 
-Structure ExpressionXmlParser::parseStructure(const QDomElement &_structure)
+Structure ExpressionXmlParser::parseStructure(const QDomElement &_structure, QList<TEException>& errors)
 {
-    validateElement(_structure, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, true);
+    validateElement(_structure, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, errors, true);
 
-    QString name = parseName(_structure);
-    QHash<QString, Variable> variables = parseVariables(_structure.firstChildElement("variables"));
-    QHash<QString, Function> functions = parseFunctions(_structure.firstChildElement("functions"));
+    QString name = parseName(_structure, errors);
+    QHash<QString, Variable> variables = parseVariables(_structure.firstChildElement("variables"), errors);
+    QHash<QString, Function> functions = parseFunctions(_structure.firstChildElement("functions"), errors);
 
     int elementsCount = variables.count() + functions.count();
     if(elementsCount > childElementsMaxCount)
-        throw TEException(ErrorType::InputSizeExceeded, _structure.lineNumber(), QList<QString>{QString::number(elementsCount), QString::number(elementsCount), QString::number(childElementsMaxCount)});
+        errors.append(TEException(ErrorType::InputElementsExceeded, _structure.lineNumber(), QList<QString>{"structure", QString::number(elementsCount), QString::number(childElementsMaxCount)}));
 
     return Structure(name, variables, functions);
 }
 
-QHash<QString, Class> ExpressionXmlParser::parseClasses(const QDomElement &_classes)
+QHash<QString, Class> ExpressionXmlParser::parseClasses(const QDomElement &_classes, QList<TEException>& errors)
 {
 
-    validateElement(_classes, QList<QString>{}, QHash<QString, int>{{"class", childElementsMaxCount}}, false);
+    validateElement(_classes, QList<QString>{}, QHash<QString, int>{{"class", childElementsMaxCount}}, errors, false);
 
     QHash<QString, Class> result;
     if(_classes.childNodes().isEmpty()) return result;
@@ -345,36 +338,33 @@ QHash<QString, Class> ExpressionXmlParser::parseClasses(const QDomElement &_clas
     QDomNode childNode = _classes.firstChild();
     while (!childNode.isNull()) {
 
-        Class child = parseClass(childNode.toElement());
+        Class child = parseClass(childNode.toElement(), errors);
         result.insert(child.name, child);
 
         childNode = childNode.nextSibling();
-
     }
-
     return result;
-
 }
 
-Class ExpressionXmlParser::parseClass(const QDomElement &_class)
+Class ExpressionXmlParser::parseClass(const QDomElement &_class, QList<TEException>& errors)
 {
-    validateElement(_class, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, true);
+    validateElement(_class, QList<QString>{"name"}, QHash<QString, int>{{"variables", 1}, {"functions", 1}}, errors, true);
 
-    QString name = parseName(_class);
-    QHash<QString, Variable> variables = parseVariables(_class.firstChildElement("variables"));
-    QHash<QString, Function> functions = parseFunctions(_class.firstChildElement("functions"));
+    QString name = parseName(_class, errors);
+    QHash<QString, Variable> variables = parseVariables(_class.firstChildElement("variables"), errors);
+    QHash<QString, Function> functions = parseFunctions(_class.firstChildElement("functions"), errors);
 
     int elementsCount = variables.count() + functions.count();
     if(elementsCount > childElementsMaxCount)
-        throw TEException(ErrorType::InputSizeExceeded, _class.lineNumber(), QList<QString>{QString::number(elementsCount), QString::number(elementsCount), QString::number(childElementsMaxCount)});
+        errors.append(TEException(ErrorType::InputElementsExceeded, _class.lineNumber(), QList<QString>{"claass", QString::number(elementsCount), QString::number(childElementsMaxCount)}));
 
     return Class(name, variables, functions);
 }
 
-QHash<QString, Enum> ExpressionXmlParser::parseEnums(const QDomElement &_enums)
+QHash<QString, Enum> ExpressionXmlParser::parseEnums(const QDomElement &_enums, QList<TEException>& errors)
 {
 
-    validateElement(_enums, QList<QString>{}, QHash<QString, int>{{"enum", 20}}, false);
+    validateElement(_enums, QList<QString>{}, QHash<QString, int>{{"enum", 20}}, errors, false);
 
     QHash<QString, Enum> result;
     if(_enums.childNodes().isEmpty()) return result;
@@ -382,28 +372,25 @@ QHash<QString, Enum> ExpressionXmlParser::parseEnums(const QDomElement &_enums)
     QDomNode childNode = _enums.firstChild();
     while (!childNode.isNull()) {
 
-        Enum child = parseEnum(childNode.toElement());
+        Enum child = parseEnum(childNode.toElement(), errors);
         result.insert(child.name, child);
 
         childNode = childNode.nextSibling();
-
     }
-
     return result;
-
 }
 
-Enum ExpressionXmlParser::parseEnum(const QDomElement &_enum)
+Enum ExpressionXmlParser::parseEnum(const QDomElement &_enum, QList<TEException>& errors)
 {
-    validateElement(_enum, QList<QString>{"name"}, QHash<QString, int>{{"value", 20}}, true);
+    validateElement(_enum, QList<QString>{"name"}, QHash<QString, int>{{"value", 20}}, errors, true);
 
-    QString name = parseName(_enum);
-    QHash<QString, QString> values = parseEnumValues(_enum);
+    QString name = parseName(_enum, errors);
+    QHash<QString, QString> values = parseEnumValues(_enum, errors);
 
     return Enum(name, values);
 }
 
-QHash<QString, QString> ExpressionXmlParser::parseEnumValues(const QDomElement &_values)
+QHash<QString, QString> ExpressionXmlParser::parseEnumValues(const QDomElement &_values, QList<TEException>& errors)
 {
     QHash<QString, QString> result;
     // Перебираем все элементы <value> внутри <enum>
@@ -411,47 +398,85 @@ QHash<QString, QString> ExpressionXmlParser::parseEnumValues(const QDomElement &
     for (int i = 0; i < valueNodes.size(); ++i) {
         QDomElement valueElement = valueNodes.at(i).toElement();
 
-        validateElement(valueElement, QList<QString>{"name"}, QHash<QString, int>{{"description", 1}}, true);
+        validateElement(valueElement, QList<QString>{"name"}, QHash<QString, int>{{"description", 1}}, errors, true);
 
         QString valueName = valueElement.attribute("name");
-        QString description = valueElement.firstChildElement("description").text();
+        QString description = parseDescription(valueElement.firstChildElement("description"), errors);
 
         result.insert(valueName, description);
     }
-
     return result;
 }
 
-QString ExpressionXmlParser::parseName(const QDomElement &element) {
+QString ExpressionXmlParser::parseName(const QDomElement &element, QList<TEException>& errors) {
 
     QString res = element.attribute("name");
-    if(res.isEmpty() || res.length() < 1) throw TEException(ErrorType::EmptyAttributeName);
-    if(res.length() > nameMaxLength) throw TEException(ErrorType::InputSizeExceeded, element.lineNumber(), QList<QString>{"name", QString::number(res.length()), QString::number(nameMaxLength)});
+    if(res.isEmpty() || res.length() < 1)
+    {
+        errors.append(TEException(ErrorType::EmptyAttributeName, element.lineNumber()));
+        return "";
+    }
+    if(res.length() > nameMaxLength) errors.append(TEException(ErrorType::InputSizeExceeded, element.lineNumber(), QList<QString>{res, QString::number(res.length()), QString::number(nameMaxLength)}));
+    // Первый символ - латинская буква или _
+    const QChar first = res[0];
+    if (!(isLatinLetter(first) || first == '_')) {
+        errors.append(TEException(ErrorType::InvalidName, element.lineNumber(), QList<QString>{res}));
+    }
+    // Остальные символы - латинские буквы, цифры или _
+    for(int i = 0; i < res.length(); i++) {
+        if (!(isLatinLetter(res[i]) || res[i].isDigit() || res[i] == '_')) {
+            errors.append(TEException(ErrorType::InvalidName, element.lineNumber(), QList<QString>{res}));
+        }
+    }
+    return res;
+}
+
+QString ExpressionXmlParser::parseType(const QDomElement& element, QList<TEException> &errors)
+{
+    QString res = element.attribute("type");
+    if(res.isEmpty() || res.length() < 1) {
+        errors.append(TEException(ErrorType::EmptyAttributeName, element.lineNumber(), QList<QString>{"type"}));
+        return "";
+    }
+    if(res.length() > nameMaxLength) errors.append(TEException(ErrorType::InputSizeExceeded, element.lineNumber(), QList<QString>{res, QString::number(res.length()), QString::number(nameMaxLength)}));
 
     // Первый символ - латинская буква или _
     const QChar first = res[0];
     if (!(isLatinLetter(first) || first == '_')) {
-        throw TEException(ErrorType::InvalidName, element.lineNumber());
-    }
-
-    // Остальные символы - латинские буквы, цифры или _
-    for(int i = 0; i < res.length(); i++) {
-        if (!(isLatinLetter(res[i]) || res[i].isDigit() || res[i] == '_')) {
-            throw TEException(ErrorType::InvalidName, element.lineNumber(), QList<QString>{res});
-        }
+        errors.append(TEException(ErrorType::InvalidType, element.lineNumber(), QList<QString>{res}));
     }
 
     return res;
-
 }
 
-QString ExpressionXmlParser::parseDescription(const QDomElement &_description) {
+int ExpressionXmlParser::parseParamsCount(const QDomElement& element, QList<TEException> &errors)
+{
+    QString res = element.attribute("paramsCount");
+    if(res.isEmpty() || res.length() < 1) {
+        errors.append(TEException(ErrorType::EmptyAttributeName, element.lineNumber(), QList<QString>{"paramsCount"}));
+        return 0;
+    }
+
+    bool parseSuccess = false;
+    int count = res.toInt(&parseSuccess);
+
+    if(!parseSuccess) {
+        errors.append(TEException(ErrorType::InvalidParamsCount, element.lineNumber(), {"res"}));
+        count = 0;
+    }
+
+    if(count < 0 || count > functionParamsMaxCount) errors.append(TEException(ErrorType::InvalidParamsCount, element.lineNumber(), QList<QString>{QString::number(count)}));
+
+    return count;
+}
+
+QString ExpressionXmlParser::parseDescription(const QDomElement &_description, QList<TEException>& errors) {
 
     QString res = _description.text();
 
-    if(res.isEmpty()) throw TEException(ErrorType::EmptyElementValue);
+    if(res.isEmpty()) errors.append(TEException(ErrorType::EmptyElementValue, _description.lineNumber(), QList<QString>{"description"}));
 
-    if(res.length() > descMaxLength) throw TEException(ErrorType::InputSizeExceeded, _description.lineNumber(), QList<QString>{"description", QString::number(res.length()), QString::number(descMaxLength)});
+    if(res.length() > descMaxLength) errors.append(TEException(ErrorType::InputSizeExceeded, _description.lineNumber(), QList<QString>{res, QString::number(res.length()), QString::number(descMaxLength)}));
 
     return res;
 }
@@ -461,21 +486,17 @@ bool ExpressionXmlParser::isLatinLetter(const QChar c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
-void ExpressionXmlParser::validateElement(const QDomElement& curElement, const QList<QString>& allowedAttributes, const QHash<QString, int>& allowedElements, bool checkRequired, bool textIsError) {
-
-    //if(textIsError && (curElement.isText() || curElement) throw TEException(ErrorType::XML_INPUT_SIZE_EXCEEDED, this->inputFilePath, curElement.lineNumber(), QList<QString>{curElement.text(), QString::number(curElement.text().length()), "0"});
-
-    validateAttributes(curElement, allowedAttributes);
-    validateChildElements(curElement, allowedElements);
+void ExpressionXmlParser::validateElement(const QDomElement& curElement, const QList<QString>& allowedAttributes, const QHash<QString, int>& allowedElements, QList<TEException>& errors, bool checkRequired, bool textIsError) {
+    validateAttributes(curElement, allowedAttributes, errors);
+    validateChildElements(curElement, allowedElements, errors);
 
     if (checkRequired) {
-        validateRequiredAttributes(curElement, allowedAttributes);
-        validateRequiredChildElements(curElement, allowedElements.keys());
+        validateRequiredAttributes(curElement, allowedAttributes, errors);
+        validateRequiredChildElements(curElement, allowedElements.keys(), errors);
     }
-
 }
 
-void ExpressionXmlParser::validateAttributes(const QDomElement& curElement, const QList<QString>& attributes) {
+void ExpressionXmlParser::validateAttributes(const QDomElement& curElement, const QList<QString>& attributes, QList<TEException>& errors) {
 
     QDomNamedNodeMap getAttributes = curElement.attributes();
     for (int i = 0; i < getAttributes.length(); i++) {
@@ -483,12 +504,12 @@ void ExpressionXmlParser::validateAttributes(const QDomElement& curElement, cons
 
         // Проверяем, есть ли этот атрибут в списке elements
         if (!attributes.contains(attribute.name()) || attributes.count() == 0) {
-            throw TEException(ErrorType::UnexpectedAttribute, attribute.lineNumber(), QList<QString>{attribute.name(), attributes.join("; ")});
+            errors.append(TEException(ErrorType::UnexpectedAttribute, attribute.lineNumber(), QList<QString>{attribute.name(), attributes.join("; ")}));
         }
     }
 }
 
-void ExpressionXmlParser::validateChildElements(const QDomElement& curElement, const QHash<QString, int>& elements) {
+void ExpressionXmlParser::validateChildElements(const QDomElement& curElement, const QHash<QString, int>& elements, QList<TEException>& errors) {
 
     QDomNode childNode = curElement.firstChild();
     while (!childNode.isNull()) {
@@ -497,34 +518,32 @@ void ExpressionXmlParser::validateChildElements(const QDomElement& curElement, c
             QString childName = childElement.tagName();
 
             if (!elements.contains(childName) || elements.count() == 0) {
-                throw TEException(ErrorType::UnexpectedElement, childElement.lineNumber(), QList<QString>{childName, elements.keys().join("; ")});
+                errors.append(TEException(ErrorType::UnexpectedElement, childElement.lineNumber(), QList<QString>{childName, elements.keys().join("; ")}));
             }
             else {
                 int count = countDirectChildren(curElement, childName);
                 int value = elements.value(childName);
                 if(count > value)
-                    throw TEException(ErrorType::DuplicateElement, childElement.lineNumber(), QList<QString>{childName});
+                    errors.append(TEException(ErrorType::DuplicateElement, childElement.lineNumber(), QList<QString>{childName}));
             }
         }
-
         childNode = childNode.nextSibling();
     }
 }
 
-void ExpressionXmlParser::validateRequiredAttributes(const QDomElement& curElement, const QList<QString>& attributes) {
+void ExpressionXmlParser::validateRequiredAttributes(const QDomElement& curElement, const QList<QString>& attributes, QList<TEException>& errors) {
 
     QListIterator<QString> iter(attributes);
 
     while(iter.hasNext()){
         QString it = iter.next();
         if (!curElement.hasAttribute(it)) {
-            throw TEException(ErrorType::MissingRequiredAttribute, curElement.lineNumber(), QList<QString>{it});
+            errors.append(TEException(ErrorType::MissingRequiredAttribute, curElement.lineNumber(), QList<QString>{it}));
         }
     }
-
 }
 
-void ExpressionXmlParser::validateRequiredChildElements(const QDomElement& curElement, const QList<QString>& elements) {
+void ExpressionXmlParser::validateRequiredChildElements(const QDomElement& curElement, const QList<QString>& elements, QList<TEException>& errors) {
 
     QListIterator<QString> iter(elements);
     while(iter.hasNext()){
@@ -541,7 +560,7 @@ void ExpressionXmlParser::validateRequiredChildElements(const QDomElement& curEl
         }
 
         if (!foundCurElement) {
-            throw TEException(ErrorType::MissingRequiredChildElement, curElement.lineNumber(), QList<QString>{it});
+            errors.append(TEException(ErrorType::MissingRequiredChildElement, curElement.lineNumber(), QList<QString>{it}));
         }
     }
 }
