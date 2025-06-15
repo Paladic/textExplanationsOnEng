@@ -72,6 +72,10 @@ struct OperatorInfo {
     OperationType type;
 };
 
+extern const QSet<QString> DataTypes;
+
+extern const QHash<OperationType, OperationType> InverseComparisonOperationsMap;
+
 extern const QHash<QString, OperatorInfo> OperationMap;
 
 extern const QHash<EntityType, QString> EntityTypeNames;
