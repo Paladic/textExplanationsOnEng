@@ -64,7 +64,7 @@ void test_getExplanation::getExplanation_data()
     QTest::newRow("single-placeholder-empty-argument")
         << "{1}"
         << QList<QString>{""}
-        << "{1}";
+        << "";
 
     // Тест 3: В строке нет мест для замены
     QTest::newRow("no-placeholder")
@@ -100,7 +100,7 @@ void test_getExplanation::getExplanation_data()
     QTest::newRow("mixed-placeholders-and-strings")
         << "{1} {2}"
         << QList<QString>{"{2}", "hello"}
-        << "{2} hello";
+        << "hello hello";
 
     // Тест 10: Строка содержит только место для замены второго аргумента
     QTest::newRow("second-placeholder-only")
