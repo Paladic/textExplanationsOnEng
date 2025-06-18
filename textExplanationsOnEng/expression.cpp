@@ -2,13 +2,6 @@
 #include "expressionxmlparser.h"
 #include "expressiontranslator.h"
 
-
-Expression::Expression(const QString inputXMLFile) {
-
-    ExpressionXmlParser::readDataFromXML(inputXMLFile, *this);
-
-}
-
 void Expression::setExpression(const QString &newExpression)
 {
     expression = newExpression;
@@ -144,6 +137,34 @@ const CustomTypeWithFields Expression::getCustomTypeByName(const QString &typeNa
     }
     return type;
 }
+
+Expression Expression::fromFile(const QString &path)
+{
+    Expression expr;
+    ExpressionXmlParser::readDataFromXML(path, expr);
+    return expr;
+}
+
+QSet<QString> Expression::getCustomDataTypes() const
+{
+    QSet<QString> customDataTypes;
+
+    for (auto it = unions.cbegin(); it != unions.cend(); ++it) {
+        customDataTypes.insert(it.value().name);
+    }
+    for (auto it = structures.cbegin(); it != structures.cend(); ++it) {
+        customDataTypes.insert(it.value().name);
+    }
+    for (auto it = classes.cbegin(); it != classes.cend(); ++it) {
+        customDataTypes.insert(it.value().name);
+    }
+    for (auto it = enums.cbegin(); it != enums.cend(); ++it) {
+        customDataTypes.insert(it.value().name);
+    }
+
+    return customDataTypes;
+}
+
 
 QString Expression::ToQstring()
 {

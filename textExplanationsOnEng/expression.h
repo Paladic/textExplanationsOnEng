@@ -10,7 +10,6 @@
 class Expression
 {
 public:
-    Expression(const QString inputXMLFile);
     Expression(
         const QString& expr = "",
         const QHash<QString, Variable>& vars = {},
@@ -29,6 +28,7 @@ public:
         , enums(enms)
     {}
 
+    static Expression fromFile(const QString& path);
     QString ToQstring();
     QString ToExplanation(const ExpressionNode *node, const QString& className = "", OperationType parentOperType = OperationType::None) const;
 
