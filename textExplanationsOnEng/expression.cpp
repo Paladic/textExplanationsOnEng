@@ -531,14 +531,12 @@ bool Expression::isIdentifier(const QString &str)
 }
 
 
-
-
-QList<QString> Expression::argsToDescr(const QList<ExpressionNode *> *functionArgs, QString customDataType) const
+QList<QString> Expression::argsToDescr(const QList<ExpressionNode *> *functionArgs, QString& intermediateDescription, QString customDataType, OperationType parentOperType) const
 {
     QList<QString> descriptions;
     QList<ExpressionNode *>::const_iterator i;
     for(i = functionArgs->constBegin(); i != functionArgs->constEnd(); i++){
-        descriptions.append(ToExplanation(*i));
+        descriptions.append(ToExplanation(*i, intermediateDescription, customDataType, parentOperType));
     }
     return descriptions;
 }

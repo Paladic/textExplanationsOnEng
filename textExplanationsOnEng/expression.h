@@ -44,7 +44,7 @@ public:
     static bool isIdentifier(const QString& str);
 
     
-    QList<QString> argsToDescr(const QList<ExpressionNode *> *functionArgs, QString customDataType = "") const;
+    QList<QString> argsToDescr(const QList<ExpressionNode *> *functionArgs, QString &intermediateDescription, QString customDataType = "", OperationType parentOperType = OperationType::None) const;
 
     OperationType getOperationTypeByStr(const QString& str);
 
