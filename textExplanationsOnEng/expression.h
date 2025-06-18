@@ -43,6 +43,7 @@ public:
     bool isEnum(const QString& str);
     static bool isIdentifier(const QString& str);
 
+    static bool isLatinLetter(const QChar c);
     
     QList<QString> argsToDescr(const QList<ExpressionNode *> *functionArgs, QString &intermediateDescription, QString customDataType = "", OperationType parentOperType = OperationType::None) const;
 

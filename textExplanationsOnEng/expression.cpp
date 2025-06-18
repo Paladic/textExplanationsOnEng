@@ -530,6 +530,11 @@ bool Expression::isIdentifier(const QString &str)
     return isInd;
 }
 
+bool Expression::isLatinLetter(const QChar c)
+{
+    // Явная проверка латинских букв
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
 
 QList<QString> Expression::argsToDescr(const QList<ExpressionNode *> *functionArgs, QString& intermediateDescription, QString customDataType, OperationType parentOperType) const
 {
