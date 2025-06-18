@@ -38,15 +38,7 @@ public:
     EntityType getEntityTypeByStr(const QString& str);
     bool isConst(const QString& str);
     bool isVariable(const QString& str);
-    static bool isFunction(const QString& str)
-    {
-        bool ok = false;
-        if(str.contains('(') && str.endsWith(')')){
-            if(isIdentifier(str.left(str.indexOf('(')))) ok = true;
-            else throw TEException(ErrorType::InvalidSymbol, QList<QString>{str});
-        }
-        return ok;
-    }
+    static bool isFunction(const QString& str);
     bool isCustomTypeWithFields(const QString& str);
     bool isEnum(const QString& str);
     static bool isIdentifier(const QString& str)
