@@ -41,29 +41,8 @@ public:
     static bool isFunction(const QString& str);
     bool isCustomTypeWithFields(const QString& str);
     bool isEnum(const QString& str);
-    static bool isIdentifier(const QString& str)
-    {
-        bool isInd = true;
-        // Первый символ - латинская буква или _
-        if (str.isEmpty()) isInd = false;
-        else{
-            if (!(isLatinLetter(str[0]) || str[0] == '_')) {
-                isInd = false;
-            }
-            // Остальные символы - латинские буквы, цифры или _
-            for(int i = 0; i < str.length(); i++) {
-                if (!(isLatinLetter(str[i]) || str[i].isDigit() || str[i] == '_')) {
-                    isInd = false;
-                }
-            }
-        }
-        return isInd;
-    }
+    static bool isIdentifier(const QString& str);
 
-    static bool isLatinLetter(const QChar c) {
-        // Явная проверка латинских букв
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    }
     
     QList<QString> argsToDescr(const QList<ExpressionNode *> *functionArgs, QString customDataType = "") const;
 

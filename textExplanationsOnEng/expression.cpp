@@ -488,6 +488,26 @@ bool Expression::isEnum(const QString &str)
     return ok;
 }
 
+bool Expression::isIdentifier(const QString &str)
+{
+    bool isInd = true;
+    // Первый символ - латинская буква или _
+    if (str.isEmpty()) isInd = false;
+    else{
+        if (!(isLatinLetter(str[0]) || str[0] == '_')) {
+            isInd = false;
+            throw TEException(ErrorType::InvalidSymbol, QList<QString>{str[0]});
+        }
+        // Остальные символы - латинские буквы, цифры или _
+        for(int i = 0; i < str.length() && isInd == true; i++) {
+            if (!(isLatinLetter(str[i]) || str[i].isDigit() || str[i] == '_')) {
+                isInd = false;
+                throw TEException(ErrorType::InvalidSymbol, QList<QString>{str[i]});
+            }
+        }
+    }
+    return isInd;
+}
 
 
 
