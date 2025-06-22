@@ -181,7 +181,8 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {{"Apple", Structure("Apple",
-                                    {{"age", Variable("age", "int", "age")}}, {})}},
+                                    {{"age", Variable("age", "int", "age")},
+                                    {"sort", Variable("sort", "string", "sort")}}, {})}},
                {},
                {})
         << QVariant::fromValue<ErrorType>(ErrorType::NeverUsedElement);
@@ -205,7 +206,8 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {{"newApple", Variable("newApple", "Apple")}},
                {},
                {{"Apple", Union("Apple",
-                                {{"age", Variable("age", "int", "age")}}, {})}},
+                                {{"age", Variable("age", "int", "age")},
+                                 {"sort", Variable("sort", "string", "sort")}}, {})}},
                {},
                {})
         << QVariant::fromValue<ErrorType>(ErrorType::NeverUsedElement);
@@ -246,11 +248,11 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {{"Apple", Class("Apple",
-                                {{"sort", Variable("sort", "string", "apple sort")}})},
+                                {{"sort", Variable("sort", "string", "sort")}})},
                 {"PinApple", Class("PinApple",
-                                   {{"sort", Variable("sort", "string", "pineapple sort")}})}},
+                                   {{"sort", Variable("sort", "string", "sort")}})}},
                {})
-        << QVariant("apple sort equal pineapple sort");
+        << QVariant("apple's sort is equal to pineapple's sort");
 
     // Тест 18: Ввод двух одинаковых полей у разных структур
     QTest::newRow("duplicate-fields-different-structures")
@@ -261,12 +263,12 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {{"Apple", Structure("Apple",
-                                    {{"sort", Variable("sort", "string", "apple sort")}})},
+                                    {{"sort", Variable("sort", "string", "sort")}})},
                 {"PinApple", Structure("PinApple",
-                                       {{"sort", Variable("sort", "string", "pineapple sort")}})}},
+                                       {{"sort", Variable("sort", "string", "sort")}})}},
                {},
                {})
-        << QVariant("apple sort equal pineapple sort");
+        << QVariant("apple's sort is equal to pineapple's sort");
 
     // Тест 19: Ввод двух одинаковых полей у разных объединений
     QTest::newRow("duplicate-fields-different-unions")
@@ -276,18 +278,18 @@ void test_getExplanationInEn::getExplanationInEn_data()
                 {"newPinApple", Variable("newPinApple", "PinApple", "pineapple")}},
                {},
                {{"Apple", Union("Apple",
-                                {{"sort", Variable("sort", "string", "apple sort")}})},
+                                {{"sort", Variable("sort", "string", "sort")}})},
                 {"PinApple", Union("PinApple",
-                                   {{"sort", Variable("sort", "string", "pineapple sort")}})}},
+                                   {{"sort", Variable("sort", "string", "sort")}})}},
                {},
                {})
-        << QVariant("apple sort equal pineapple sort");
+        << QVariant("apple's sort is equal to pineapple's sort");
 
     // Тест 20: Ввод двух одинаковых значений у разных перечислений
     QTest::newRow("duplicate-values-different-enums")
         << Expression(
                "notFruitSort Fruit Sort :: != notFruitSort Vegetable Sort :: == &&",
-               {{"notFruitSort", Variable("notFruitSort", "Sort", "not fruit sort")}},
+               {{"notFruitSort", Variable("notFruitSort", "Vegetable", "not fruit sort")}},
                {},
                {},
                {},
@@ -296,7 +298,7 @@ void test_getExplanationInEn::getExplanationInEn_data()
                                {{"Sort", "sort"}})},
                 {"Vegetable", Enum("Vegetable",
                                    {{"Sort", "sort"}})}})
-        << QVariant("not fruit sort not equal sort and not fruit sort equal sort");
+        << QVariant("not fruit sort is not equal to sort and not fruit sort is equal to sort");
 
     // Тест 21: Одинаковое описание у разных переменных
     QTest::newRow("duplicate-descriptions-different-variables")
@@ -406,7 +408,7 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {})
-        << QVariant("sum for maximum in 1 and 4, 3");
+        << QVariant("sum for maximum in 1 and 4 and 3");
 
     // Тест 30: Операция в параметре функции
     QTest::newRow("operation-in-function-parameter")
@@ -431,7 +433,7 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {{"Human", Class("Human", {},
                                 {{"getAge", Function("getAge", "int", 0, "age")}})}},
                {})
-        << QVariant("oleg’s age");
+        << QVariant("oleg's age");
 
     // Тест 32: Вызов функции объединения
     QTest::newRow("union-function-call")
@@ -444,7 +446,7 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {})
-        << QVariant("oleg’s age");
+        << QVariant("oleg's age");
 
     // Тест 33: Вызов функции структуры
     QTest::newRow("structure-function-call")
@@ -457,13 +459,13 @@ void test_getExplanationInEn::getExplanationInEn_data()
                                     {{"getAge", Function("getAge", "int", 0, "age")}})}},
                {},
                {})
-        << QVariant("oleg’s age");
+        << QVariant("oleg's age");
     // Тест 34: Количество аргументов функции выражения не совпадает с количеством, указанным в функции
     QTest::newRow("function-argument-mismatch")
         << Expression(
                "tostring(1)",
                {},
-               {{"tostring", Function("tostring", "string", 2, "print {1} and {2}")}},
+               {{"tostring", Function("tostring", "string", 1, "print {1} and {2}")}},
                {},
                {},
                {},
@@ -486,15 +488,15 @@ void test_getExplanationInEn::getExplanationInEn_data()
     QTest::newRow("function-with-redundant-word-in-description")
         << Expression(
                "s v t getDistance(2) =",
-               {{"v", Variable("v", "speed car", "speed of car")},
-                {"s", Variable("s", "distance", "distance traveled")},
-                {"t", Variable("t", "time travel", "time taken for travel")}},
-               {{"getDistance", Function("getDistance", "distance", 2, "assign distance by speed {1} to time {2}")}},
+               {{"v", Variable("v", "int", "speed car")},
+                {"s", Variable("s", "int", "distance")},
+                {"t", Variable("t", "int", "time travel")}},
+               {{"getDistance", Function("getDistance", "int", 2, "assign distance by speed {1} to time {2}")}},
                {},
                {},
                {},
                {})
-        << QVariant("assign distance by speed car to time travel");
+        << QVariant("assign distance by speed car to time travel to distance");
 
     // Тест 37: Префиксная инкрементация
     QTest::newRow("prefix-increment")
@@ -531,7 +533,7 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {})
-        << QVariant("increment not cool value, then get sum of cool value and not cool value, then increment cool value");
+        << QVariant("get increment not cool value, then get sum of cool value and not cool value, then increment cool value");
 
     // Тест 40: Постфиксная и префиксная инкрементация одной переменной
     QTest::newRow("postfix-and-prefix-increment-same-var")
@@ -548,7 +550,7 @@ void test_getExplanationInEn::getExplanationInEn_data()
     // Тест 41: Отрицание операции сравнения
     QTest::newRow("negation-of-comparison-operation")
         << Expression(
-               "a < b !",
+               "a b < !",
                {{"a", Variable("a", "int", "cool value")},
                 {"b", Variable("b", "int", "not cool value")}},
                {},
@@ -568,7 +570,7 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {})
-        << QVariant("difference of 1 and the sum of 1 and 1");
+        << QVariant("difference of 1 and the sum of 1, 1");
 
     // Тест 43: Несколько операций деления подряд
     QTest::newRow("multiple-division-operations")
@@ -580,12 +582,12 @@ void test_getExplanationInEn::getExplanationInEn_data()
                {},
                {},
                {})
-        << QVariant("quotient of 1 and the product of 1 and 1");
+        << QVariant("quotient of 1 and the product of 1, 1");
 
     // Тест 44: Указатель на адрес
     QTest::newRow("pointer-to-address")
         << Expression(
-               "a & *",
+               "a & *_",
                {{"a", Variable("a", "int", "cool value")}},
                {},
                {},
@@ -597,12 +599,12 @@ void test_getExplanationInEn::getExplanationInEn_data()
     // Тест 45: Разыменование суммы
     QTest::newRow("dereferencing-sum")
         << Expression(
-               "1 2 + 3 + *",
+               "1 2 + 3 + *_",
                {},
                {},
                {},
                {},
                {},
                {})
-        << QVariant("get the element at index equivalent sum of elements (2+3) of pointer 1");
+        << QVariant("get the element at the index equal to the pointer of sum of 1, 2 and 3");
 }

@@ -11,7 +11,7 @@ public:
 
 private slots: // должны быть приватными
     void getExplanationInEn();
-    void getExplanationInEn_data(); // removeDuplicates...
+    void getExplanationInEn_data(); // removeConsecutiveDuplicates...
 
 };
 

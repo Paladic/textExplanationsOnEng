@@ -177,13 +177,13 @@ void test_expressionToNodes::expressionToNodes_data()
     {
         QString exprString = "";
         Expression expression(exprString, {});
+        ExpressionNode* emptyNode = new ExpressionNode();
 
         QTest::newRow("empty-string")
             << exprString
             << expression
-            << true
-            << static_cast<ExpressionNode*>(nullptr)
-            << ErrorType::UndefinedId;
+            << false
+            << emptyNode;
     }
 
     // Тест 7: Строка содержит унарную операцию и простую операцию сложения "1 ++_ 2 +"
@@ -216,7 +216,7 @@ void test_expressionToNodes::expressionToNodes_data()
 
         // Ожидаемое дерево:
         //    helloWorld
-        ExpressionNode* root = new ExpressionNode(EntityType::Function, "helloWorld", nullptr, nullptr, "", OperationType::None, args);
+        ExpressionNode* root = new ExpressionNode(EntityType::Function, "helloWorld", nullptr, nullptr, "void", OperationType::None, args);
 
         QTest::newRow("function-no-arguments")
             << exprString
@@ -238,7 +238,7 @@ void test_expressionToNodes::expressionToNodes_data()
         auto* args = new QList<ExpressionNode*>();
         args->append(left);
 
-        ExpressionNode* root = new ExpressionNode(EntityType::Function, "factorial", nullptr, nullptr, "", OperationType::None, args);
+        ExpressionNode* root = new ExpressionNode(EntityType::Function, "factorial", nullptr, nullptr, "int", OperationType::None, args);
 
         QTest::newRow("function-one-variable")
             << exprString
@@ -263,7 +263,7 @@ void test_expressionToNodes::expressionToNodes_data()
             new ExpressionNode(EntityType::Const, "6", nullptr, nullptr),
             new ExpressionNode(EntityType::Const, "7", nullptr, nullptr)
         };
-        ExpressionNode* root = new ExpressionNode(EntityType::Function, "max", nullptr, nullptr, "", OperationType::None, functionArgs);
+        ExpressionNode* root = new ExpressionNode(EntityType::Function, "max", nullptr, nullptr, "int", OperationType::None, functionArgs);
 
         QTest::newRow("function-with-multiple-variables")
             << exprString
@@ -301,7 +301,7 @@ void test_expressionToNodes::expressionToNodes_data()
 
     // Тест 13: Строка содержит массив, индекс которого получается простой операцией "1 1 + array[]"
     {
-        QString exprString = "1 1 + array[]";
+        QString exprString = "array 1 1 + []";
         Expression expression(exprString, {{"array", Variable("array", "int[]")}});
 
         // Ожидаемое дерево:
@@ -327,7 +327,7 @@ void test_expressionToNodes::expressionToNodes_data()
     // Тест 14: Строка содержит пользовательский тип перечисление "TestEnum ValueEnum ::"
     {
         QString exprString = "TestEnum ValueEnum ::";
-        Expression expression(exprString, {}, {}, {}, {}, {}, {{"TestEnum", Enum({"ValueEnum"}, {{"ValueEnum", {}}})}});
+        Expression expression(exprString, {}, {}, {}, {}, {}, {{"TestEnum", Enum({"TestEnum"}, {{"ValueEnum", {}}})}});
 
         // Ожидаемое дерево:
         //          ::
@@ -361,17 +361,12 @@ void test_expressionToNodes::expressionToNodes_data()
 
     // Тест 16: Строка содержит строку с польской записью "3 2 sum(2)"
     {
-        QString exprString = "3 2 sum(2)";
-        Expression expression(exprString, {}, {{"sum", Function("sum", "int", 2)}});
+        QString exprString = "\"3 2 sum(2)\"";
+        Expression expression(exprString, {}, {});
 
         // Ожидаемое дерево:
-        //         sum
-        //        /   \
-        //       3     2
-        ExpressionNode* left = new ExpressionNode(EntityType::Const, "3", nullptr, nullptr);
-        ExpressionNode* right = new ExpressionNode(EntityType::Const, "2", nullptr, nullptr);
-        QList<ExpressionNode*>* args = new QList<ExpressionNode*>{left, right};
-        ExpressionNode* root = new ExpressionNode(EntityType::Function, "sum", nullptr, nullptr, "", OperationType::None, args);
+        //         "3 2 sum(2)"
+        ExpressionNode* root = new ExpressionNode(EntityType::Const, "\"3 2 sum(2)\"", nullptr, nullptr, "string");
 
         QTest::newRow("polish-notation-sum")
             << exprString
@@ -411,7 +406,7 @@ void test_expressionToNodes::expressionToNodes_data()
             << expression
             << true
             << static_cast<ExpressionNode*>(nullptr)
-            << ErrorType::ParamsCountFunctionMissmatch;
+            << ErrorType::InvalidSymbol;
     }
 
     // Тест 19: Строка содержит булеву константу и логическую операцию "true !"
@@ -435,7 +430,7 @@ void test_expressionToNodes::expressionToNodes_data()
 
     // Тест 20: Строка содержит количество операций, превышающее лимит (20)
     {
-        QString exprString = "1 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +";
+        QString exprString = "1 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +";
 
         Expression expression(exprString, {});
 
@@ -468,7 +463,7 @@ void test_expressionToNodes::expressionToNodes_data()
 
     // Тест 22: Строка содержит функцию, которой нет в списке функций "myFunction()"
     {
-        QString exprString = "myFunction()";
+        QString exprString = "myFunction(0)";
         Expression expression(exprString, {}, {}); // пустой список функций
 
         QTest::newRow("undefined-function")
@@ -580,14 +575,15 @@ void test_expressionToNodes::expressionToNodes_data()
         //         /  \
         //   TestEnum ValueEnum1
         ExpressionNode* left = new ExpressionNode(EntityType::Enum, "TestEnum", nullptr, nullptr);
-        ExpressionNode* right = new ExpressionNode(EntityType::Variable, "ValueEnum1", nullptr, nullptr);
-        ExpressionNode* root = new ExpressionNode(EntityType::Operation, "::", left, right);
+        ExpressionNode* right = new ExpressionNode(EntityType::Variable, "ValueEnum1", nullptr, nullptr, "TestEnum");
+        ExpressionNode* root = new ExpressionNode(EntityType::Operation, "::", left, right, "", OperationType::StaticMemberAccess);
 
         QTest::newRow("enum-element-last")
             << exprString
             << expression
-            << false
-            << root;
+            << true
+            << root
+            << ErrorType::NeverUsedElement;
     }
 
     // Тест 31: Строка содержит элемент перечисления при наличии второго элемента на первом месте "TestEnum ValueEnum2 ::"
@@ -600,14 +596,15 @@ void test_expressionToNodes::expressionToNodes_data()
         //         /  \
         //   TestEnum ValueEnum2
         ExpressionNode* left = new ExpressionNode(EntityType::Enum, "TestEnum", nullptr, nullptr);
-        ExpressionNode* right = new ExpressionNode(EntityType::Variable, "ValueEnum2", nullptr, nullptr);
-        ExpressionNode* root = new ExpressionNode(EntityType::Operation, "::", left, right);
+        ExpressionNode* right = new ExpressionNode(EntityType::Variable, "ValueEnum2", nullptr, nullptr, "TestEnum");
+        ExpressionNode* root = new ExpressionNode(EntityType::Operation, "::", left, right, "", OperationType::StaticMemberAccess);
 
         QTest::newRow("enum-element-first")
             << exprString
             << expression
-            << false
-            << root;
+            << true
+            << root
+            << ErrorType::NeverUsedElement;
     }
 
     // Тест 32: Строка не использует все переменные "myVar1"
@@ -665,7 +662,7 @@ void test_expressionToNodes::expressionToNodes_data()
     // Тест 36: Строка использует поле класса, которое схоже с названием другого поля класса "chel age ."
     {
         QString exprString = "chel age .";
-        Expression expression(exprString, {{"chel", Variable("chel", "Human")}}, {}, {}, {}, {{"Human", Class("", {{"ages", Variable("ages", "int", {})}, {"age", Variable("age", "int", {})}})}});
+        Expression expression(exprString, {{"chel", Variable("chel", "Human")}}, {}, {}, {}, {{"Human", Class("Human", {{"ages", Variable("ages", "int", {})}, {"age", Variable("age", "int", {})}})}});
 
         QTest::newRow("similar-class-fields")
             << exprString
@@ -946,17 +943,24 @@ void test_expressionToNodes::expressionToNodes_data()
         // Ожидаемое дерево:
         //           sum
         //          /   \
-        //         3    max
-        //             /   \
-        //            1     2
+        //         max  3
+        //       /   \
+        //       1   2
+        // Создаем узлы для аргументов функции max
+        ExpressionNode* arg1 = new ExpressionNode(EntityType::Const, "1", nullptr, nullptr);
+        ExpressionNode* arg2 = new ExpressionNode(EntityType::Const, "2", nullptr, nullptr);
+
+        // Создаем узел для функции max с аргументами
         ExpressionNode* maxNode = new ExpressionNode(EntityType::Function, "max",
-                                                     new ExpressionNode(EntityType::Const, "1", nullptr, nullptr),
-                                                     new ExpressionNode(EntityType::Const, "2", nullptr, nullptr),
-                                                     "");
+                                                     nullptr, nullptr,
+                                                     "int", OperationType::None,
+                                                     new QList<ExpressionNode*>{arg1, arg2});
+
+        // Создаем узел для функции sum, использующей maxNode как левый аргумент
         ExpressionNode* root = new ExpressionNode(EntityType::Function, "sum",
-                                                  new ExpressionNode(EntityType::Const, "3", nullptr, nullptr),
-                                                  maxNode,
-                                                  "");
+                                                  nullptr, nullptr,
+                                                  "int", OperationType::None,
+                                                  new QList<ExpressionNode*>{maxNode, new ExpressionNode(EntityType::Const, "3", nullptr, nullptr)});
 
         QTest::newRow("function-argument-is-function")
             << exprString
@@ -985,7 +989,7 @@ void test_expressionToNodes::expressionToNodes_data()
         ExpressionNode* root = new ExpressionNode(EntityType::Function, "toString",
                                                   nullptr,
                                                   nullptr,
-                                                  "", OperationType::None, new QList<ExpressionNode*>({addition}));
+                                                  "string", OperationType::None, new QList<ExpressionNode*>({addition}));
 
         QTest::newRow("operation-inside-function")
             << exprString

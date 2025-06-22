@@ -22,7 +22,8 @@ void test_toExplanation::toExplanation()
     QFETCH(QString, expectedExplanation);
 
     try {
-        QString result = expression.ToExplanation(node, className, parentOperType);
+        QString empty = "";
+        QString result = expression.ToExplanation(node, empty, className, parentOperType);
         qDebug() << "Actual Explanation: " << result;
         qDebug() << "Expected Explanation: " << expectedExplanation;
 
@@ -147,7 +148,7 @@ void test_toExplanation::toExplanation_data()
 
         ExpressionNode* node = new ExpressionNode(EntityType::Operation, "_++",
                                                   new ExpressionNode(EntityType::Variable, "a"),
-                                                  nullptr, "", OperationType::PostfixDecrement);
+                                                  nullptr, "", OperationType::PostfixIncrement);
 
         QString explanation = "increment number of days";
 
@@ -199,7 +200,7 @@ void test_toExplanation::toExplanation_data()
                                                                      new ExpressionNode(EntityType::Variable, "age", nullptr, nullptr, "int"), "", OperationType::FieldAccess),
                                                   new ExpressionNode(EntityType::Variable, "a"), "", OperationType::Addition);
 
-        QString explanation = "sum of chel’s age and number of days";
+        QString explanation = "sum of chel's age and number of days";
 
         QTest::newRow("class-field-operation-variable")
             << expression
@@ -227,7 +228,7 @@ void test_toExplanation::toExplanation_data()
                                                                      new ExpressionNode(EntityType::Variable, "age", nullptr, nullptr, "int"), "", OperationType::FieldAccess),
                                                   new ExpressionNode(EntityType::Variable, "a"), "", OperationType::Addition);
 
-        QString explanation = "sum of chel’s age and number of days";
+        QString explanation = "sum of chel's age and number of days";
 
         QTest::newRow("structure-field-operation-variable")
             << expression
@@ -255,7 +256,7 @@ void test_toExplanation::toExplanation_data()
                                                                      new ExpressionNode(EntityType::Variable, "age", nullptr, nullptr, "int"), "", OperationType::FieldAccess),
                                                   new ExpressionNode(EntityType::Variable, "a"), "", OperationType::Addition);
 
-        QString explanation = "sum of chel’s age and number of days";
+        QString explanation = "sum of chel's age and number of days";
 
         QTest::newRow("union-field-operation-variable")
             << expression
@@ -274,7 +275,7 @@ void test_toExplanation::toExplanation_data()
             {}, {}, {}, {}
             );
 
-        ExpressionNode* node = new ExpressionNode(EntityType::Function, "rnd", nullptr, nullptr, "int");
+        ExpressionNode* node = new ExpressionNode(EntityType::Function, "rnd", nullptr, nullptr, "int", OperationType::None, new QList<ExpressionNode*>{});
 
         QString explanation = "get random number";
 
@@ -290,7 +291,7 @@ void test_toExplanation::toExplanation_data()
     {
         Expression expression(
             "chel kill(0) .",
-            {{"chel", Variable("chel", "Human", "person")}},
+            {{"chel", Variable("chel", "Human", "chel")}},
             {},
             {}, {},
             {{"Human", Class("Human", {},
@@ -300,9 +301,9 @@ void test_toExplanation::toExplanation_data()
 
         ExpressionNode* node = new ExpressionNode(EntityType::Operation, ".",
                                                   new ExpressionNode(EntityType::Variable, "chel", nullptr, nullptr, "Human"),
-                                                  new ExpressionNode(EntityType::Function, "kill", nullptr, nullptr, "void"), "", OperationType::FieldAccess);
+                                                  new ExpressionNode(EntityType::Function, "kill", nullptr, nullptr, "void", OperationType::None, new QList<ExpressionNode*>{}), "", OperationType::FieldAccess, new QList<ExpressionNode*>{});
 
-        QString explanation = "chel’s kill";
+        QString explanation = "chel's kill";
 
         QTest::newRow("class-method-call")
             << expression
@@ -316,7 +317,7 @@ void test_toExplanation::toExplanation_data()
     {
         Expression expression(
             "chel kill(0) .",
-            {{"chel", Variable("chel", "Human", "person")}},
+            {{"chel", Variable("chel", "Human", "chel")}},
             {},
             {},
             {{"Human", Structure("Human", {},
@@ -327,9 +328,9 @@ void test_toExplanation::toExplanation_data()
 
         ExpressionNode* node = new ExpressionNode(EntityType::Operation, ".",
                                                   new ExpressionNode(EntityType::Variable, "chel", nullptr, nullptr, "Human"),
-                                                  new ExpressionNode(EntityType::Function, "kill", nullptr, nullptr, "void"), "", OperationType::FieldAccess);
+                                                  new ExpressionNode(EntityType::Function, "kill", nullptr, nullptr, "void", OperationType::None, new QList<ExpressionNode*>{}), "", OperationType::FieldAccess);
 
-        QString explanation = "chel’s kill";
+        QString explanation = "chel's kill";
 
         QTest::newRow("structure-method-call")
             << expression
@@ -343,7 +344,7 @@ void test_toExplanation::toExplanation_data()
     {
         Expression expression(
             "chel kill(0) .",
-            {{"chel", Variable("chel", "Human", "person")}},
+            {{"chel", Variable("chel", "Human", "chel")}},
             {},
             {{"Human", Union("Human", {},
                              {{"kill", Function("kill", "void", 0, "kill")}})}},
@@ -354,9 +355,9 @@ void test_toExplanation::toExplanation_data()
 
         ExpressionNode* node = new ExpressionNode(EntityType::Operation, ".",
                                                   new ExpressionNode(EntityType::Variable, "chel", nullptr, nullptr, "Human"),
-                                                  new ExpressionNode(EntityType::Function, "kill", nullptr, nullptr, "void"), "", OperationType::FieldAccess);
+                                                  new ExpressionNode(EntityType::Function, "kill", nullptr, nullptr, "void", OperationType::None, new QList<ExpressionNode*>{}), "", OperationType::FieldAccess);
 
-        QString explanation = "chel’s kill";
+        QString explanation = "chel's kill";
 
         QTest::newRow("union-method-call")
             << expression
@@ -424,7 +425,7 @@ void test_toExplanation::toExplanation_data()
     {
         Expression expression(
             "oleg cool +",
-            {{"oleg", Variable("oleg", "string", "Oleg")},
+            {{"oleg", Variable("oleg", "string", "oleg")},
              {"cool", Variable("cool", "string", "is cool")}},
             {},
             {},
@@ -434,8 +435,8 @@ void test_toExplanation::toExplanation_data()
             );
 
         ExpressionNode* node = new ExpressionNode(EntityType::Operation, "+",
-                                                  new ExpressionNode(EntityType::Variable, "oleg"),
-                                                  new ExpressionNode(EntityType::Variable, "cool"), "", OperationType::Addition);
+                                                  new ExpressionNode(EntityType::Variable, "oleg", nullptr, nullptr, "string"),
+                                                  new ExpressionNode(EntityType::Variable, "cool", nullptr, nullptr, "string"), "", OperationType::Addition);
 
         QString explanation = "concatenation of oleg and is cool";
 
@@ -451,7 +452,7 @@ void test_toExplanation::toExplanation_data()
     {
         Expression expression(
             "oleg oleg +",
-            {{"oleg", Variable("oleg", "string", "Oleg")}},
+            {{"oleg", Variable("oleg", "int", "oleg")}},
             {},
             {},
             {},
