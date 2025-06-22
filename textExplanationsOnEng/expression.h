@@ -29,6 +29,8 @@ public:
     {}
 
     static Expression fromFile(const QString& path);
+    QSet<QString> getCustomDataTypes() const;
+
     QString ToQstring();
     QString ToExplanation(const ExpressionNode *node, const QString& className = "", OperationType parentOperType = OperationType::None) const;
 
@@ -86,6 +88,7 @@ public:
 
     void getCustomTypeFields(QSet<QString> &names, const CustomTypeWithFields &customType);
     static QStringList splitExpression(const QString &str);
+    QString sanitizeDataType(const QString &dataType);
 private:
     QString expression; // Текстовое выражение
     QHash<QString, Variable> variables; //  Переменные
