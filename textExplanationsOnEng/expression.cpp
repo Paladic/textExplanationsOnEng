@@ -443,6 +443,16 @@ ExpressionNode* Expression::expressionToNodes() {
     return nodeStack.pop();
 }
 
+void Expression::getCustomTypeFields(QSet<QString>& names, const CustomTypeWithFields& customType) {
+    names.insert(customType.name);
+    for (auto i = customType.variables.cbegin(); i != customType.variables.cend(); i++) {
+        names.insert(customType.name + "." + i.value().name);
+    }
+    for (auto i = customType.functions.cbegin(); i != customType.functions.cend(); i++) {
+        names.insert(customType.name + "." + i.value().name);
+    }
+}
+
 QSet<QString> Expression::getAllNames() {
     QSet<QString> names;
     // переменные
