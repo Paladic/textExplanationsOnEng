@@ -35,6 +35,7 @@ public:
     QString getExplanationInEn();
     ExpressionNode* expressionToNodes();
 
+    QSet<QString> getAllNames();
     EntityType getEntityTypeByStr(const QString& str);
     bool isConst(const QString& str);
     bool isVariable(const QString& str);
