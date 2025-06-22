@@ -32,7 +32,7 @@ public:
     QSet<QString> getCustomDataTypes() const;
 
     QString ToQstring();
-    QString ToExplanation(const ExpressionNode *node, const QString& className = "", OperationType parentOperType = OperationType::None) const;
+    QString ToExplanation(const ExpressionNode *node, QString &intermediateDescription, const QString& className = "", OperationType parentOperType = OperationType::None) const;
 
     QString getExplanationInEn();
     ExpressionNode* expressionToNodes();
