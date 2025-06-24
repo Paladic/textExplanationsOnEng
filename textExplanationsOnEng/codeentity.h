@@ -133,27 +133,27 @@ struct CustomTypeWithFields {
  * \brief Структура, представляющая объединение (union)
  */
 struct Union : public CustomTypeWithFields {
-    Union(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
+    explicit Union(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
-    QString toQString(const QString& startLine = "") const;
+    QString toQString(const QString& startLine = "") const override;
 };
 
 /*!
  * \brief Структура, представляющая структуру (struct)
  */
 struct Structure : public CustomTypeWithFields {
-    Structure(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
+    explicit Structure(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
-    QString toQString(const QString& startLine = "") const;
+    QString toQString(const QString& startLine = "") const override;
 };
 
 /*!
  * \brief Структура, представляющая класс (class)
  */
 struct Class : public CustomTypeWithFields {
-    Class(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
+    explicit Class(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
-    QString toQString(const QString& startLine = "") const;
+    QString toQString(const QString& startLine = "") const override;
 };
 
 /*!
@@ -163,7 +163,7 @@ struct Enum {
     QString name;                               /*!< Имя перечисления */
     QHash<QString, QString> values;             /*!< Значения перечисления */
 
-    Enum(const QString& name = "", const QHash<QString, QString>& values = {});
+    explicit Enum(const QString& name = "", const QHash<QString, QString>& values = {});
 
     /*!
      * \brief Преобразование перечисления в строку

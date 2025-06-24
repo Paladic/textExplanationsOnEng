@@ -18,7 +18,6 @@
 class Expression
 {
 public:
-    Expression(
 
     /*!
      * \brief Конструктор Expression
@@ -30,6 +29,7 @@ public:
      * \param[in] cls Словарь классов
      * \param[in] enms Словарь перечислений
      */
+    explicit Expression(
         const QString& expr = "",
         const QHash<QString, Variable>& vars = {},
         const QHash<QString, Function>& funcs = {},

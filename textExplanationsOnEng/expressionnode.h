@@ -18,11 +18,10 @@
 class ExpressionNode
 {
 public:
-    ExpressionNode();
-    ExpressionNode(EntityType nodeType, const QString& value,  ExpressionNode* left = nullptr, ExpressionNode* right = nullptr, const QString& dataType = "", OperationType operType = OperationType::None, QList<ExpressionNode*>* functionArgs = {});
     /*!
      * \brief Конструктор по умолчанию
      */
+    explicit ExpressionNode();
 
     /*!
      * \brief Конструктор узла выражения
@@ -34,6 +33,12 @@ public:
      * \param[in] operType Тип операции (если это операция)
      * \param[in] functionArgs Аргументы функции (если это функция)
      */
+    explicit ExpressionNode(EntityType nodeType, const QString& value,
+                   ExpressionNode* left = nullptr,
+                   ExpressionNode* right = nullptr,
+                   const QString& dataType = "",
+                   OperationType operType = OperationType::None,
+                   QList<ExpressionNode*>* functionArgs = {});
 
     /*!
      * \brief Получение строкового представления узла (рекурсивное)

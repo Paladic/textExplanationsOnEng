@@ -62,12 +62,6 @@ enum class ErrorType {
 class TEException
 {
 public:
-
-    TEException(const ErrorType errorType, const QString &filename, const int line, const QList<QString> args = QList<QString>());
-    TEException(const ErrorType errorType, const int line, const QList<QString> args = QList<QString>());
-    TEException(const ErrorType errorType, const QString &filename, const QList<QString> args = QList<QString>());
-    TEException(const ErrorType errorType, const QList<QString> args = QList<QString>());
-
     /*!
      * \brief Конструктор с указанием типа ошибки, имени файла, строки и аргументов
      * \param[in] errorType Тип ошибки
@@ -75,6 +69,7 @@ public:
      * \param[in] line Номер строки, на которой произошла ошибка
      * \param[in] args Аргументы для шаблона сообщения об ошибке
      */
+    explicit TEException(const ErrorType errorType, const QString &filename, const int line, const QList<QString> args = QList<QString>());
 
     /*!
      * \brief Конструктор с указанием типа ошибки, строки и аргументов
@@ -82,6 +77,7 @@ public:
      * \param[in] line Номер строки, на которой произошла ошибка
      * \param[in] args Аргументы для шаблона сообщения об ошибке
      */
+    explicit TEException(const ErrorType errorType, const int line, const QList<QString> args = QList<QString>());
 
     /*!
      * \brief Конструктор с указанием типа ошибки, имени файла и аргументов
@@ -89,12 +85,14 @@ public:
      * \param[in] filename Имя файла, в котором произошла ошибка
      * \param[in] args Аргументы для шаблона сообщения об ошибке
      */
+    explicit TEException(const ErrorType errorType, const QString &filename, const QList<QString> args = QList<QString>());
 
     /*!
      * \brief Конструктор с указанием типа ошибки и аргументов
      * \param[in] errorType Тип ошибки
      * \param[in] args Аргументы для шаблона сообщения об ошибке
      */
+    explicit TEException(const ErrorType errorType, const QList<QString> args = QList<QString>());
 
     /*!
      * \brief Получить текст сообщения об ошибке
