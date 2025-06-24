@@ -25,3 +25,6 @@ HEADERS += \
     test_isidentifier.h \
     test_removeconsecutiveduplicates.h \
     test_toexplanation.h
+
+QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
+QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage
