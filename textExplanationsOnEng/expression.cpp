@@ -364,7 +364,7 @@ QString Expression::getExplanationInEn()
     QString explanation = "";
     if(!this->getExpression()->isEmpty() || !this->getAllNames().isEmpty()){
         // Преобразовать выражение в дерево
-        ExpressionNode* explanationTree = this->expressionToNodes();
+        const ExpressionNode* explanationTree = this->expressionToNodes();
         // Получить объяснение выражения
         QString hui = "";
         explanation = this->ToExplanation(explanationTree, hui);
@@ -489,7 +489,7 @@ ExpressionNode* Expression::expressionToNodes() {
             // если тип данных не определен
             if(dataType == ""){
                 if(!nodeStack.empty()){
-                    ExpressionNode *rightSibling = nodeStack.top();
+                    const ExpressionNode *rightSibling = nodeStack.top();
                     // если следующая лексема существует
                     if(i+1 != tokens.end()){
                         // если эта лексема обращение к полю
@@ -544,7 +544,7 @@ ExpressionNode* Expression::expressionToNodes() {
             // если возвращаемый тип данных не был определен
             if(funcDataType == ""){
                 if(!nodeStack.empty()){
-                    ExpressionNode *rightSibling = nodeStack.top();
+                    const ExpressionNode *rightSibling = nodeStack.top();
                     // если следующая лексема существует
                     if(i+1 != tokens.end()){
                         // если эта лексема обращение к полю
