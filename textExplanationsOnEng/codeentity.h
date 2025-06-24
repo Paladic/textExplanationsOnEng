@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \brief Заголовочный файл, содержащий определения сущностей кода, типов операций и пользовательских структур
+ */
+
 #ifndef CODEENTITY_H
 #define CODEENTITY_H
 
@@ -6,148 +11,165 @@
 #include <QSet>
 #include <QString>
 
+/*! \brief Перечисление типов сущностей */
 enum class EntityType {
-    Operation,
-    Const,
-    Variable,
-    Function,
-    CustomTypeWithFields,
-    Enum,
-    Undefined
+    Operation,              /*!< Операция */
+    Const,                  /*!< Константа */
+    Variable,               /*!< Переменная */
+    Function,               /*!< Функция */
+    CustomTypeWithFields,   /*!< Пользовательский тип с полями */
+    Enum,                   /*!< Перечисление */
+    Undefined               /*!< Неопределённый тип */
 };
 
+/*! \brief Арность операции */
 enum class OperationArity {
-    Unary,
-    Binary
+    Unary,      /*!< Унарная операция */
+    Binary      /*!< Бинарная операция */
 };
 
+/*! \brief Типы операций */
 enum class OperationType {
-    PrefixIncrement,          // Префиксный инкремент
-    PrefixDecrement,          // Префиксный декремент
-    ArrayAccess,              // Обращение к элементу под индексом
-    FieldAccess,              // Обращение к полю элемента
-    PointerFieldAccess,       // Обращение к полю по указателю
-    Dereference,              // Обращение к значению по адресу
-    AddressOf,                // Обращение к адресу элемента
-    UnaryMinus,               // Унарный минус
-    Not,                      // Логическое «не»
-    And,                      // Логическое «и»
-    Or,                       // Логическое «или»
-    Multiplication,           // Умножение
-    Division,                 // Деление
-    Modulus,                  // Остаток от деления
-    Addition,                 // Сложение
-    Concatenation,            // Конкатенация
-    Subtraction,              // Вычитание
-    LessThan,                 // Оператор сравнения «меньше»
-    GreaterThan,              // Оператор сравнения «больше»
-    LessThanOrEqual,          // Оператор сравнения «меньше либо равно»
-    GreaterThanOrEqual,       // Оператор сравнения «больше либо равно»
-    Equal,                    // Оператор сравнения «равно»
-    NotEqual,                 // Оператор сравнения «не равно»
-    ModulusAssignment,        // Взятие остатка от деления с присваиванием
-    DivisionAssignment,       // Деление с присваиванием
-    MultiplicationAssignment, // Умножение с присваиванием
-    SubtractionAssignment,    // Вычитание с присваиванием
-    AdditionAssignment,       // Сложение с присваиванием
-    Assignment,               // Присваивание
-    PostfixDecrement,         // Постфиксный декремент
-    PostfixIncrement,         // Постфиксный инкремент
-    StaticMemberAccess,       // Обращение к статическому элементу
-    NotLessThan,              // Логическое "не меньше"
-    NotLessThanOrEqual,       // Логическое "не меньше или равно"
-    NotGreaterThan,           // Логическое "не больше"
-    NotGreaterThanOrEqual,    // Логическое "не больше или равно"
-    PointerIndexAccess,       // Получение элементу по индексу указателя
-    SubtractionSequence,      // Операции вычитания подряд
-    DivisionSequence,         // Операции деления подряд
-    SingleIncrement,          // Один инкремент
-    SingleDecrement,          // Один декремент
-    FunctionCall,
-    None
+    PrefixIncrement, PrefixDecrement, ArrayAccess, FieldAccess, PointerFieldAccess,
+    Dereference, AddressOf, UnaryMinus, Not, And, Or, Multiplication, Division,
+    Modulus, Addition, Concatenation, Subtraction, LessThan, GreaterThan,
+    LessThanOrEqual, GreaterThanOrEqual, Equal, NotEqual, ModulusAssignment,
+    DivisionAssignment, MultiplicationAssignment, SubtractionAssignment, AdditionAssignment,
+    Assignment, PostfixDecrement, PostfixIncrement, StaticMemberAccess, NotLessThan,
+    NotLessThanOrEqual, NotGreaterThan, NotGreaterThanOrEqual, PointerIndexAccess,
+    SubtractionSequence, DivisionSequence, SingleIncrement, SingleDecrement,
+    FunctionCall, None
 };
 
+/*!
+ * \brief Структура, содержащая информацию об операторе
+ */
 struct OperatorInfo {
-    OperationArity arity;
-    OperationType type;
+    OperationArity arity;     /*!< Арность операции */
+    OperationType type;       /*!< Тип операции */
 };
 
+/*!
+ * \brief Набор допустимых типов данных
+ */
 extern const QSet<QString> DataTypes;
 
+/*!
+ * \brief Словарь для сопоставления операции сравнения с обратной
+ */
 extern const QHash<OperationType, OperationType> InverseComparisonOperationsMap;
 
+/*!
+ * \brief Словарь всех поддерживаемых операций и их характеристик
+ */
 extern const QHash<QString, OperatorInfo> OperationMap;
 
+/*!
+ * \brief Словарь текстовых представлений типов сущностей
+ */
 extern const QHash<EntityType, QString> EntityTypeNames;
 
+/*!
+ * \brief Словарь текстовых представлений типов операций
+ */
 extern const QHash<OperationType, QString> OperationTypeNames;
 
-// Переменная
+/*!
+ * \brief Структура, представляющая переменную
+ */
 struct Variable {
+    QString name;           /*!< Имя переменной */
+    QString type;           /*!< Тип переменной */
+    QString description;    /*!< Описание переменной */
 
-    QString name;           // имя
-    QString type;           // тип
-    QString description;    // описание
+    explicit Variable(const QString& name = "", const QString& type = "", const QString& description = {});
 
-    Variable(const QString& name = "", const QString& type = "", const QString& description = {});
-
+    /*!
+     * \brief Преобразование переменной в строку
+     * \param[in] startLine Префикс для первой строки
+     * \return Строковое представление переменной
+     */
     QString toQString(const QString& startLine = "") const;
 };
 
-// Функция
+/*!
+ * \brief Структура, представляющая функцию
+ */
 struct Function {
+    QString name;           /*!< Имя функции */
+    QString type;           /*!< Возвращаемый тип */
+    int paramsCount;        /*!< Количество параметров */
+    QString description;    /*!< Описание функции */
 
-    QString name;           // Имя
-    QString type;           // Тип
-    int paramsCount;        // Количество входных параметров
-    QString description;    // Описание
+    explicit Function(const QString& name = "", const QString& type = "", int paramsCount = 0, const QString& description = {});
 
-    Function(const QString& name = "", const QString& type = "", int paramsCount = 0, const QString& description = {});
-
+    /*!
+     * \brief Преобразование функции в строку
+     * \param[in] startLine Префикс для первой строки
+     * \return Строковое представление функции
+     */
     QString toQString(const QString& startLine = "") const;
-
 };
 
-// Пользовательский тип данных
+/*!
+ * \brief Пользовательский тип данных с переменными и функциями
+ */
 struct CustomTypeWithFields {
-    QString name;               // Имя
-    QHash<QString, Variable> variables; // Переменные
-    QHash<QString, Function> functions; // Функции
+    QString name;                               /*!< Имя типа */
+    QHash<QString, Variable> variables;         /*!< Список переменных */
+    QHash<QString, Function> functions;         /*!< Список функций */
 
-    CustomTypeWithFields(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
-    QString toQString(const QString& startLine = "") const;
+    explicit CustomTypeWithFields(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
+
+    /*!
+     * \brief Преобразование пользовательского типа в строку
+     * \param[in] startLine Префикс для первой строки
+     * \return Строковое представление
+     */
+    virtual QString toQString(const QString& startLine = "") const;
 };
 
-
-// Объединение
+/*!
+ * \brief Структура, представляющая объединение (union)
+ */
 struct Union : public CustomTypeWithFields {
     Union(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
 
-// Структура
+/*!
+ * \brief Структура, представляющая структуру (struct)
+ */
 struct Structure : public CustomTypeWithFields {
     Structure(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
 
-// Класс
+/*!
+ * \brief Структура, представляющая класс (class)
+ */
 struct Class : public CustomTypeWithFields {
     Class(const QString& name = "", const QHash<QString, Variable>& variables = {}, const QHash<QString, Function>& functions = {});
 
     QString toQString(const QString& startLine = "") const;
 };
 
-// Перечисление
+/*!
+ * \brief Структура, представляющая перечисление (enum)
+ */
 struct Enum {
-
-    QString name;                   // Имя
-    QHash<QString, QString> values;  // Значения
+    QString name;                               /*!< Имя перечисления */
+    QHash<QString, QString> values;             /*!< Значения перечисления */
 
     Enum(const QString& name = "", const QHash<QString, QString>& values = {});
 
+    /*!
+     * \brief Преобразование перечисления в строку
+     * \param[in] startLine Префикс для первой строки
+     * \return Строковое представление перечисления
+     */
     QString toQString(const QString& startLine = "") const;
 };
 

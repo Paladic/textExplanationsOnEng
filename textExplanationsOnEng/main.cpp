@@ -1,3 +1,24 @@
+/*!
+* \file
+* \brief Данный файл содержит главную функцию программы textExplanationsOnEng.
+*
+* \mainpage Документация для программы "text explanations on english language (textExplanationsOnEng)"
+Программа предназначена для генерации текстового объяснения выражения на английском языке. Она принимает на вход XML-файл с описанием выражения и генерирует соответствующее объяснение в виде текстового файла.
+\n\nДля функционирования программы необходима операционная система Windows 7 или выше.
+\nТребуемые библиотеки: Qt6Core.dll, Qt6Xml.dll, libgcc_s_seh-1.dll, libstdc++-6.dll, libwinpthread-1.dll
+\nПрограмма должна получать два аргумента командной строки: имя входного файла и имя выходного файла в формате 'txt'
+
+\nПример команды запуска программы:
+* \code
+.\textExplanationsOnEng.exe input.txt output.txt
+* \endcode
+
+* \author Chechetko Nikita
+* \date June 2025
+* \version 1.0
+*/
+
+
 #include "expression.h"
 #include "qdir.h"
 #include "teexception.h"
@@ -12,9 +33,27 @@
 //#include <QQmlApplicationEngine>
 
 
+/*!
+ * \brief Выводит справочное сообщение в поток
+ * \param[out] cout Поток вывода (например, QTextStream(stdout))
+ * \param[in] filename Имя исполняемого файла, подставляется в шаблон использования
+ */
 void printHelpMessage(QTextStream& cout, const QString& filename);
+
+/*!
+ * \brief Печатает примеры тестов в стандартный поток
+ * \param[out] cout Поток вывода, куда печатаются тестовые данные
+ */
 void printTests(QTextStream& cout);
+
+/*!
+ * \brief Печатает пояснение выражения, считанного из XML-файла
+ * \param[out] cout Поток, в который выводится пояснение
+ * \param[in] inputFile Путь к входному XML-файлу с выражением
+ * \param[in] outputFile Путь к выходному файлу (если необходимо сохранить результат)
+ */
 void printExplanation(QTextStream& cout, const QString& inputFile, const QString& outputFile);
+
 
 
 int main(int argc, char *argv[])
