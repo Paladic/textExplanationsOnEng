@@ -67,29 +67,29 @@ bool ExpressionNode::isReducibleUnarySelfInverse() const
 }
 
 bool ExpressionNode::isComparisonOperation() const {
-    if (this != nullptr && this->getNodeType() == EntityType::Operation) {
-        OperationType operType = this->getOperType();
-        return operType == OperationType::LessThan ||
-               operType == OperationType::LessThanOrEqual ||
-               operType == OperationType::GreaterThan ||
-               operType == OperationType::GreaterThanOrEqual ||
-               operType == OperationType::Equal ||
-               operType == OperationType::NotEqual ||
-               operType == OperationType::NotLessThan ||
-               operType == OperationType::NotLessThanOrEqual ||
-               operType == OperationType::NotGreaterThan ||
-               operType == OperationType::NotGreaterThanOrEqual;
+    if (this->getNodeType() == EntityType::Operation) {
+        OperationType curOperType = this->getOperType();
+        return curOperType == OperationType::LessThan ||
+               curOperType == OperationType::LessThanOrEqual ||
+               curOperType == OperationType::GreaterThan ||
+               curOperType == OperationType::GreaterThanOrEqual ||
+               curOperType == OperationType::Equal ||
+               curOperType == OperationType::NotEqual ||
+               curOperType == OperationType::NotLessThan ||
+               curOperType == OperationType::NotLessThanOrEqual ||
+               curOperType == OperationType::NotGreaterThan ||
+               curOperType == OperationType::NotGreaterThanOrEqual;
     }
     return false;
 }
 
 bool ExpressionNode::isIncrementOrDecrement() const {
-    if (this != nullptr && this->getNodeType() == EntityType::Operation) {
-        OperationType operType = this->getOperType();
-        return operType == OperationType::PostfixIncrement ||
-               operType == OperationType::PrefixIncrement ||
-               operType == OperationType::PostfixDecrement ||
-               operType == OperationType::PrefixDecrement;
+    if (this->getNodeType() == EntityType::Operation) {
+        OperationType curOperType = this->getOperType();
+        return curOperType == OperationType::PostfixIncrement ||
+               curOperType == OperationType::PrefixIncrement ||
+               curOperType == OperationType::PostfixDecrement ||
+               curOperType == OperationType::PrefixDecrement;
     }
     return false;
 }
