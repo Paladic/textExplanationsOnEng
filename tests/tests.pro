@@ -14,7 +14,8 @@ SOURCES += \
     test_isfunction.cpp \
     test_isidentifier.cpp \
     test_removeconsecutiveduplicates.cpp \
-    test_toexplanation.cpp
+    test_toexplanation.cpp \
+    test_isreducibleunaryselfinverse.cpp
 
 HEADERS += \
     test_expressiontonodes.h \
@@ -24,7 +25,8 @@ HEADERS += \
     test_isfunction.h \
     test_isidentifier.h \
     test_removeconsecutiveduplicates.h \
-    test_toexplanation.h
+    test_toexplanation.h \
+    test_isreducibleunaryselfinverse.h
 
 QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
 QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage

@@ -30,8 +30,8 @@ void test_removeConsecutiveDuplicates::removeConsecutiveDuplicates_data()
 
     // Test 1: Строка содержит одно слово
     QTest::newRow("single-word")
-        << "word"
-        << "word";
+        << "слово"
+        << "слово";
 
     // Test 2: Пустая строка
     QTest::newRow("empty-string")
@@ -40,51 +40,51 @@ void test_removeConsecutiveDuplicates::removeConsecutiveDuplicates_data()
 
     // Test 3: Два одинаковых слова подряд
     QTest::newRow("two-identical-words-consecutive")
-        << "word word"
-        << "word";
+        << "слово слово"
+        << "слово";
 
     // Test 4: Два одинаковых слова подряд с разным регистром
     QTest::newRow("two-identical-words-different-case")
-        << "Word word"
-        << "Word";
+        << "Слово слово"
+        << "Слово";
 
     // Test 5: Три одинаковых слова подряд с разным регистром
     QTest::newRow("three-identical-words-different-case")
-        << "Word word word"
-        << "Word";
+        << "Слово слово слово"
+        << "Слово";
 
     // Test 6: Два одинаковых слова, не стоящих рядом
     QTest::newRow("two-identical-words-non-consecutive")
-        << "My word is not your word"
-        << "My word is not your word";
+        << "Мое слово это не твое слово"
+        << "Мое слово это не твое слово";
 
     // Test 7: Два одинаковых слова, не стоящих рядом (короткая строка)
     QTest::newRow("two-identical-words-separated")
-        << "word to word"
-        << "word to word";
+        << "слово в слово"
+        << "слово в слово";
 
     // Test 8: Второе слово является подстрокой первого
     QTest::newRow("second-word-is-substring-of-first")
-        << "words word"
-        << "words word";
+        << "словарные слова"
+        << "словарные слова";
 
     // Test 9: Первое слово является подстрокой второго
     QTest::newRow("first-word-is-substring-of-second")
-        << "word words"
-        << "word words";
+        << "слова словарные"
+        << "слова словарные";
 
     // Test 10: Строка не содержит одинаковых слов
     QTest::newRow("no-duplicate-words")
-        << "Hello word"
-        << "Hello word";
+        << "Привет мир"
+        << "Привет мир";
 
     // Test 11: Два одинаковых слова подряд, разделенных запятой
     QTest::newRow("two-identical-words-separated-by-comma")
-        << "word, word"
-        << "word, word";
+        << "слово, слово"
+        << "слово, слово";
 
     // Test 12: Два не разделенных одинаковых слова
     QTest::newRow("two-identical-words-not-separated")
-        << "wordword"
-        << "wordword";
+        << "словослово"
+        << "словослово";
 }
