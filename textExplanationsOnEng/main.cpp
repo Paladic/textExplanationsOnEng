@@ -41,12 +41,6 @@
 void printHelpMessage(QTextStream& cout, const QString& filename);
 
 /*!
- * \brief Печатает примеры тестов в стандартный поток
- * \param[out] cout Поток вывода, куда печатаются тестовые данные
- */
-void printTests(QTextStream& cout);
-
-/*!
  * \brief Печатает пояснение выражения, считанного из XML-файла
  * \param[out] cout Поток, в который выводится пояснение
  * \param[in] inputFile Путь к входному XML-файлу с выражением
